@@ -371,6 +371,23 @@
   #recentFeed .empty { color:rgba(0,0,0,.55); }
   #recentFeed .empty h3 { color:#0A693C; }
   @media (max-width:640px){ #view-recent { padding:20px 16px 28px; } #recentFeed .fitem { flex-wrap:wrap; } }
+  /* Wall + How It Works — brand boards */
+  #view-wall, #view-how { background:var(--turf); border-radius:28px; padding:34px 30px 40px; color:var(--stadium); font-family:'Jost','Futura PT',Futura,var(--font-ui); }
+  #view-wall .empty { color:rgba(254,249,243,.6); }
+  #view-wall .empty h3 { color:var(--move); }
+  #view-how .how-sec { color:var(--move); border-bottom-color:rgba(217,224,71,.3); }
+  #view-how .how-note, #view-how .how-foot { color:rgba(254,249,243,.72); }
+  #view-how .tier-card { background:#FEF9F3; border-color:transparent; color:#000; box-shadow:none; }
+  #view-how .tier-card .tc-blurb { color:rgba(0,0,0,.5); }
+  #view-how .tier-card .lbl { color:rgba(0,0,0,.4); }
+  #view-how .tier-card .tc-earn, #view-how .tier-card .tc-reward { color:rgba(0,0,0,.72); }
+  #view-how .gloss { background:#FEF9F3; border-color:transparent; border-left-color:var(--move); color:#000; box-shadow:none; }
+  #view-how .gloss .g-t { color:#0A693C; }
+  #view-how .gloss .g-d { color:rgba(0,0,0,.6); }
+  #view-how .src-card { background:rgba(254,249,243,.06); border-color:rgba(254,249,243,.14); }
+  #view-how .src-card .src-t { color:var(--move); }
+  #view-how .src-card p { color:rgba(254,249,243,.72); }
+  @media (max-width:640px){ #view-wall, #view-how { padding:20px 16px 28px; } }
   .board-flag { width:46px; height:auto; flex:none; animation:chFlagWave 4s ease-in-out infinite; transform-origin:8% 90%; }
   .bogey-run { width:360px; flex:none; align-self:flex-end; margin-bottom:-8px; opacity:.95; animation:chTrot 3.4s ease-in-out infinite; }
   @media (prefers-reduced-motion: reduce){ .board-flag,.bogey-run{ animation:none !important; } }
@@ -720,10 +737,11 @@
     </div>
 
     <div id="view-wall" hidden>
-      <section class="how-intro">
-        <h2 class="how-h">The Wall — earned, not given</h2>
-        <p>All-Star and above. These teammates changed what this team looks like. When a Legend is named, the whole team gathers and that name goes up permanently.</p>
-      </section>
+      <div style="position:relative;overflow:hidden;background:var(--turf-deep);background-image:repeating-linear-gradient(90deg, rgba(254,249,243,.055) 0 2px, transparent 2px 22px);border:2px solid rgba(217,224,71,.35);border-radius:24px;padding:28px 30px;margin-bottom:26px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><img src="assets/CH_Flag_Move.svg" alt="Clubhouse flag" class="board-flag" style="width:36px"><span style="font-size:13px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(254,249,243,.62)">Earned, not given</span></div>
+        <h2 style="font-family:'Jost','Futura PT',Futura,sans-serif;font-weight:700;font-size:clamp(30px,5vw,46px);letter-spacing:.02em;text-transform:uppercase;color:var(--move);margin:0 0 8px">The Wall</h2>
+        <p style="margin:0;max-width:64ch;font-size:15px;color:rgba(254,249,243,.8)">All-Star and above. These teammates changed what this team looks like. When a Legend is named, the whole team gathers and that name goes up permanently.</p>
+      </div>
       <section id="wall"></section>
     </div>
 
@@ -775,10 +793,11 @@
     </div>
 
     <div id="view-how" hidden>
-      <section class="how-intro">
-        <h2 class="how-h">Your path up the roster</h2>
-        <p>At Clubhouse, everyone is elite at something. The Leaderboard exists to find it, name it, and celebrate it out loud. Every callout earns you a step up. No handicaps. No ceiling. Every rep counts.</p>
-      </section>
+      <div style="position:relative;overflow:hidden;background:var(--turf-deep);background-image:repeating-linear-gradient(90deg, rgba(254,249,243,.055) 0 2px, transparent 2px 22px);border:2px solid rgba(217,224,71,.35);border-radius:24px;padding:28px 30px;margin-bottom:22px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><img src="assets/CH_Flag_Move.svg" alt="Clubhouse flag" class="board-flag" style="width:36px"><span style="font-size:13px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(254,249,243,.62)">The Playbook</span></div>
+        <h2 style="font-family:'Jost','Futura PT',Futura,sans-serif;font-weight:700;font-size:clamp(30px,5vw,46px);letter-spacing:.02em;text-transform:uppercase;color:var(--move);margin:0 0 8px">How It Works</h2>
+        <p style="margin:0;max-width:70ch;font-size:15px;color:rgba(254,249,243,.82)">At Clubhouse, everyone is elite at something. The Leaderboard exists to find it, name it, and celebrate it out loud. Every callout earns you a step up. No handicaps. No ceiling. Every rep counts.</p>
+      </div>
 
       <h3 class="how-sec">The Tiers</h3>
       <section class="tier-ladder" id="howTiers"></section>
@@ -1279,14 +1298,21 @@
   function renderWall(){
     const host=$("#wall"); if(!host) return;
     const order=["legend","playmaker","mvp","allstar"];
+    const WC={ legend:"#FEF9F3", playmaker:"#34c77b", mvp:B_VIOLET, allstar:B_MOVE };
     const groups=order.map(id=>({ id, T:TIER_BY_ID[id],
       people:DATA.people.filter(p=>currentTier(p)===id).sort((a,b)=>stats(b).total-stats(a).total) })).filter(g=>g.people.length);
     if(!groups.length){ host.innerHTML=`<div class="empty"><h3>The wall is waiting</h3><p>Reach All-Star to earn your place here.</p></div>`; return; }
     host.innerHTML = groups.map(g=>{
-      const c=tierColor(g.id);
-      return `<div class="wall-tier"><div class="wt-label" style="color:${c}"><i style="background:${c}"></i>${g.T.name}${g.people.length>1?"s":""}</div>
-        <div class="wall-grid">${g.people.map(p=>`<div class="honor" style="--tier-c:${c}">${avatarHTML(p)}
-          <div class="hn">${esc(p.name)}</div><div class="htier" style="color:${c}">${g.T.name}</div><div class="hc">${stats(p).total} callouts</div></div>`).join("")}</div></div>`;
+      const c=WC[g.id]||B_MOVE;
+      return `<div style="margin-bottom:24px">
+        <div style="display:flex;align-items:center;gap:10px;margin:0 0 14px"><span style="width:12px;height:12px;border-radius:3px;background:${c}"></span><span style="font-family:'Jost',sans-serif;font-weight:700;font-size:20px;letter-spacing:.03em;text-transform:uppercase;color:${c}">${g.T.name}${g.people.length>1?"s":""}</span></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px">
+          ${g.people.map(p=>`<div style="text-align:center;background:rgba(254,249,243,.06);border:1px solid rgba(254,249,243,.14);border-top:4px solid ${c};border-radius:20px;padding:22px 14px 16px">
+            <div style="display:flex;justify-content:center">${boardAvatar(p, 74, c, inkOn(c))}</div>
+            <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;margin-top:12px;color:var(--stadium)">${esc(p.name)}</div>
+            <div style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:rgba(254,249,243,.5);margin-top:6px">${stats(p).total} callouts</div>
+          </div>`).join("")}</div>
+      </div>`;
     }).join("");
   }
 
