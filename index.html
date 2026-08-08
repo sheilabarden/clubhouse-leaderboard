@@ -659,6 +659,7 @@
           <span style="font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;opacity:.55">Tap a name for the breakdown</span>
         </div>
         <section class="roster" id="roster"></section>
+        <div id="rosterPager"></div>
       </div>
 
       <div class="board-ladder-panel" style="margin-top:34px;border-radius:24px;border:2px solid rgba(217,224,71,.3);padding:26px 28px;background:var(--turf-deep)">
@@ -1108,7 +1109,8 @@
 
   /* ---------- state ---------- */
   let DATA = load();
-  let ui = { sort:"callouts", filter:"all", q:"", editId:null, logSel:null, logSrc:"coach", photoBuf:undefined, recentRange:"7d", nomSel:null, showCodes:false, openRow:null };
+  let ui = { sort:"callouts", filter:"all", q:"", editId:null, logSel:null, logSrc:"coach", photoBuf:undefined, recentRange:"7d", nomSel:null, showCodes:false, openRow:null, page:1 };
+  const ROSTER_PER_PAGE = 15;
 
   function load(){
     try{ const raw=localStorage.getItem(KEY); if(raw){ const d=JSON.parse(raw); if(d&&Array.isArray(d.people)) return d; } }catch(e){}
@@ -1402,11 +1404,17 @@
     if(!list.length){
       host.innerHTML = `<div class="empty"><h3>${DATA.people.length? "No teammates match":"The roster is empty"}</h3>
         <p>${DATA.people.length? "Try a different filter or search.":"Turn on Manager and add your first teammate. Everyone starts at the tee box."}</p></div>`;
+      const pg0=$("#rosterPager"); if(pg0) pg0.innerHTML="";
       return;
     }
-    host.innerHTML = list.map((x,i)=>{
+    const totalPages = Math.max(1, Math.ceil(list.length/ROSTER_PER_PAGE));
+    if(ui.page>totalPages) ui.page=totalPages;
+    if(ui.page<1) ui.page=1;
+    const startIdx = (ui.page-1)*ROSTER_PER_PAGE;
+    const pageList = list.slice(startIdx, startIdx+ROSTER_PER_PAGE);
+    host.innerHTML = pageList.map((x,i)=>{
       const {p,s}=x; const tierId=currentTier(p); const T=TIER_BY_ID[tierId];
-      const rank=i+1;
+      const rank=startIdx+i+1;
       const last=p.callouts[p.callouts.length-1];
       const cIdx=TIER_INDEX[tierId]; const nextTier=TIERS[cIdx+1]||null;
       const curMin=tierMin(tierId);
@@ -1448,6 +1456,18 @@
           </div>
         </div>${drawer}`;
     }).join("");
+    renderRosterPager(list.length, startIdx, pageList.length, totalPages);
+  }
+  function renderRosterPager(total, startIdx, shown, totalPages){
+    const pg=$("#rosterPager"); if(!pg) return;
+    if(totalPages<=1){ pg.innerHTML=""; return; }
+    const from=startIdx+1, to=startIdx+shown;
+    const btn=(dir,label,disabled)=>`<button data-page="${dir}" ${disabled?'disabled':''} style="padding:9px 18px;border-radius:99px;background:#0A693C;color:#FEF9F3;font-family:'Jost',sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:${disabled?'default':'pointer'};opacity:${disabled?'.35':'1'}">${label}</button>`;
+    pg.innerHTML = `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 26px;border-top:1px solid rgba(0,0,0,.08);background:#FEF9F3">
+      ${btn('prev','← Prev', ui.page===1)}
+      <span style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(0,0,0,.55);text-align:center">Page ${ui.page} of ${totalPages} · ${from}–${to} of ${total}</span>
+      ${btn('next','Next →', ui.page===totalPages)}
+    </div>`;
   }
 
   function renderLegend(){
@@ -1461,11 +1481,11 @@
     host.innerHTML=opts.map(([id,label])=>`<button class="chip-f" data-tier="${id}" aria-pressed="${id==='all'}">
       ${id!=='all'?`<span class="swatch" style="background:${tierColor(id)}"></span>`:""}${label}</button>`).join("");
     host.onclick=e=>{ const b=e.target.closest("[data-tier]"); if(!b)return;
-      ui.filter=b.dataset.tier; $$("#tierFilter .chip-f").forEach(c=>c.setAttribute("aria-pressed", c===b)); renderRoster(); };
+      ui.filter=b.dataset.tier; ui.page=1; $$("#tierFilter .chip-f").forEach(c=>c.setAttribute("aria-pressed", c===b)); renderRoster(); };
   }
-  $$(".seg [data-sort]").forEach(b=>b.onclick=()=>{ ui.sort=b.dataset.sort;
+  $$(".seg [data-sort]").forEach(b=>b.onclick=()=>{ ui.sort=b.dataset.sort; ui.page=1;
     $$(".seg [data-sort]").forEach(x=>x.setAttribute("aria-pressed", x===b)); renderRoster(); });
-  $("#search").oninput=e=>{ ui.q=e.target.value.trim(); renderRoster(); };
+  $("#search").oninput=e=>{ ui.q=e.target.value.trim(); ui.page=1; renderRoster(); };
 
   /* ---------- modal plumbing ---------- */
   function openModal(id){ $("#"+id).classList.add("open"); }
@@ -1758,6 +1778,13 @@
     const row=e.target.closest("[data-rowid]"); if(!row) return;
     ui.openRow = ui.openRow===row.dataset.rowid ? null : row.dataset.rowid;
     renderRoster();
+  });
+  // roster pagination (15 per page)
+  $("#rosterPager").addEventListener("click",e=>{
+    const b=e.target.closest("[data-page]"); if(!b || b.disabled) return;
+    ui.page += (b.dataset.page==="next" ? 1 : -1);
+    renderRoster();
+    const panel=document.querySelector(".board-roster"); if(panel) panel.scrollIntoView({block:"start", behavior:"smooth"});
   });
 
   /* ---------- backup / restore / downloads ---------- */
