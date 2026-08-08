@@ -1,0 +1,12 @@
+# Dependencies (Vercel installs these during build)
+node_modules/
+
+# Vercel
+.vercel/
+
+# Local env / secrets — never commit these
+.env
+.env*.local
+
+# macOS
+.DS_Store
