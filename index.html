@@ -1,0 +1,1907 @@
+<title>The Leaderboard — Mammoth Clubhouse</title>
+<style>
+  /* ============================================================
+     THE LEADERBOARD — Mammoth Clubhouse scoreboard
+     Palette grounded in the poster: Clubhouse green, lime, orchid.
+     ============================================================ */
+  :root {
+    /* official Clubhouse brand colors */
+    --court:      #000000;   /* Court Black */
+    --move:       #D9E047;   /* Move Green (lime) */
+    --turf:       #0A693C;   /* Turf Green */
+    --stadium:    #FEF9F3;   /* Stadium Lights (cream) */
+    --violet:     #EABEEA;   /* Pulse Violet */
+
+    /* dark "night game" scoreboard — Court Black ground, is the default board look */
+    --bg:         #000000;
+    --bg-2:       #0a0d0b;
+    --panel:      #0f1411;
+    --panel-2:    #151c17;
+    --line:       #26302a;
+    --line-soft:  #1a221d;
+    --ink:        #FEF9F3;
+    --ink-soft:   #c3ccc4;
+    --ink-faint:  #838f86;
+    --accent:     #D9E047;   /* Move Green */
+    --accent-ink: #000000;
+    --highlight:  #EABEEA;   /* Pulse Violet */
+    --good:       #43cf85;
+    --gold:       #D9E047;
+    --shadow:     0 18px 44px -22px rgba(0,0,0,.75);
+    --shadow-sm:  0 6px 18px -10px rgba(0,0,0,.7);
+    --radius:     16px;
+    --radius-sm:  11px;
+    --felt: radial-gradient(120% 90% at 15% -10%, rgba(200,210,50,.10), transparent 55%),
+            radial-gradient(120% 120% at 100% 0%, rgba(233,189,232,.08), transparent 50%);
+
+    /* Futura ships on macOS (and the BOH Mac), matching the brand's primary face */
+    --font-display: "Futura", "Futura PT", "Century Gothic", "Avenir Next", "Avenir", ui-sans-serif, system-ui, sans-serif;
+    --font-ui: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+
+    /* tier ramp — BRAND COLORS ONLY: neutral grey, Pulse Violet, Turf Green scale, Move Green, Court/Stadium.
+       (dark-theme values — leaned brighter so they read on Court Black) */
+    --t-teebox:    #9aa39c;
+    --t-rookie:    #EABEEA;
+    --t-starter:   #86cfa6;
+    --t-allstar:   #34c77b;
+    --t-mvp:       #D9E047;
+    --t-playmaker: #1c8f52;
+    --t-legend:    #FEF9F3;
+  }
+  :root[data-theme="light"], .lightfix { }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg:        #FEF9F3;
+      --bg-2:      #f5efe4;
+      --panel:     #ffffff;
+      --panel-2:   #faf5ec;
+      --line:      #e7dfd0;
+      --line-soft: #efe8db;
+      --ink:       #0b1410;
+      --ink-soft:  #45514a;
+      --ink-faint: #8a9187;
+      --accent:    #0A693C;   /* Turf Green as the accent on cream */
+      --accent-ink:#FEF9F3;
+      --highlight: #EABEEA;
+      --good:      #0A693C;
+      --gold:      #0A693C;
+      --shadow:    0 18px 40px -24px rgba(10,20,14,.30);
+      --shadow-sm: 0 6px 16px -10px rgba(10,20,14,.24);
+      --felt: radial-gradient(120% 90% at 12% -10%, rgba(217,224,71,.20), transparent 55%),
+              radial-gradient(120% 120% at 100% 0%, rgba(234,190,234,.20), transparent 52%);
+      --t-teebox:#94a09a; --t-rookie:#EABEEA; --t-starter:#7ab894; --t-allstar:#2E9B63;
+      --t-mvp:#D9E047; --t-playmaker:#0A693C; --t-legend:#111111;
+    }
+  }
+  /* explicit toggle overrides media query in BOTH directions */
+  :root[data-theme="dark"] {
+    --bg:#000000; --bg-2:#0a0d0b; --panel:#0f1411; --panel-2:#151c17;
+    --line:#26302a; --line-soft:#1a221d; --ink:#FEF9F3; --ink-soft:#c3ccc4; --ink-faint:#838f86;
+    --accent:#D9E047; --accent-ink:#000000; --highlight:#EABEEA; --good:#43cf85; --gold:#D9E047;
+    --shadow:0 18px 44px -22px rgba(0,0,0,.85); --shadow-sm:0 6px 18px -10px rgba(0,0,0,.8);
+    --felt: radial-gradient(120% 90% at 15% -10%, rgba(217,224,71,.10), transparent 55%),
+            radial-gradient(120% 120% at 100% 0%, rgba(234,190,234,.08), transparent 50%);
+    --t-teebox:#9aa39c; --t-rookie:#EABEEA; --t-starter:#86cfa6; --t-allstar:#34c77b;
+    --t-mvp:#D9E047; --t-playmaker:#1c8f52; --t-legend:#FEF9F3;
+  }
+  :root[data-theme="light"] {
+    --bg:#FEF9F3; --bg-2:#f5efe4; --panel:#ffffff; --panel-2:#faf5ec;
+    --line:#e7dfd0; --line-soft:#efe8db; --ink:#0b1410; --ink-soft:#45514a; --ink-faint:#8a9187;
+    --accent:#0A693C; --accent-ink:#FEF9F3; --highlight:#EABEEA; --good:#0A693C; --gold:#0A693C;
+    --shadow:0 18px 40px -24px rgba(10,20,14,.30); --shadow-sm:0 6px 16px -10px rgba(10,20,14,.24);
+    --felt: radial-gradient(120% 90% at 12% -10%, rgba(217,224,71,.20), transparent 55%),
+            radial-gradient(120% 120% at 100% 0%, rgba(234,190,234,.20), transparent 52%);
+    --t-teebox:#94a09a; --t-rookie:#EABEEA; --t-starter:#7ab894; --t-allstar:#2E9B63;
+    --t-mvp:#D9E047; --t-playmaker:#0A693C; --t-legend:#111111;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .wrap {
+    min-height: 100vh;
+    background: var(--felt), var(--bg);
+    color: var(--ink);
+    font-family: var(--font-ui);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.45;
+    padding: clamp(14px, 3vw, 30px);
+  }
+  .shell { max-width: 1120px; margin: 0 auto; }
+
+  /* ---------- header ---------- */
+  .top {
+    display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px 22px;
+    justify-content: space-between; margin-bottom: 20px;
+  }
+  .brand { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .eyebrow {
+    font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--accent); font-weight: 800;
+    display: flex; align-items: center; gap: 9px;
+  }
+  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 800; letter-spacing: .01em;
+    font-size: clamp(34px, 7.4vw, 74px);
+    line-height: .9; margin: 2px 0 0; text-transform: uppercase;
+    text-wrap: balance;
+    background: linear-gradient(180deg, var(--ink), color-mix(in srgb, var(--ink) 78%, var(--accent)));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub { color: var(--ink-soft); font-size: 14px; margin-top: 8px; max-width: 52ch; }
+  .sub b { color: var(--ink); font-weight: 700; }
+
+  .toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    font-family: var(--font-ui); font-size: 13px; font-weight: 650;
+    border-radius: 999px; border: 1px solid var(--line);
+    background: var(--panel); color: var(--ink);
+    padding: 9px 15px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px;
+    transition: transform .12s ease, border-color .15s ease, background .15s ease, box-shadow .15s;
+    white-space: nowrap;
+  }
+  .btn:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .btn.solid { background: var(--accent); color: var(--accent-ink); border-color: transparent; font-weight: 750; }
+  .btn.solid:hover { box-shadow: 0 8px 22px -10px color-mix(in srgb, var(--accent) 70%, transparent); }
+  .btn.ghost { background: transparent; }
+  .btn svg { width: 15px; height: 15px; }
+  .btn-icon { padding: 9px; border-radius: 12px; }
+
+  /* ---------- highlight strip ---------- */
+  .strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 18px; }
+  .tile {
+    position: relative; overflow: hidden;
+    background: linear-gradient(160deg, var(--panel), var(--panel-2));
+    border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 16px 17px; box-shadow: var(--shadow-sm);
+  }
+  .tile .cap { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); font-weight: 750; }
+  .tile.lead { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+  .tile.lead::after {
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background: radial-gradient(90% 120% at 100% 0%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 60%);
+  }
+  .tile-row { display: flex; align-items: center; gap: 12px; margin-top: 11px; }
+  .tile .who { font-family: var(--font-display); font-weight: 800; text-transform: uppercase;
+    font-size: 23px; line-height: 1; letter-spacing: .01em; }
+  .tile .meta { font-size: 12.5px; color: var(--ink-soft); margin-top: 3px; }
+  .tile .big { font-family: var(--font-display); font-weight: 800; font-size: 40px; line-height: .85;
+    font-variant-numeric: tabular-nums; letter-spacing: .01em; }
+  .tile .big small { font-size: 13px; color: var(--ink-faint); font-family: var(--font-ui); font-weight: 650; letter-spacing: 0; }
+
+  /* ---------- controls ---------- */
+  .controls {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    padding: 12px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: var(--radius); margin-bottom: 16px; box-shadow: var(--shadow-sm);
+  }
+  .search { flex: 1 1 200px; display: flex; align-items: center; gap: 8px;
+    background: var(--bg-2); border: 1px solid var(--line); border-radius: 11px; padding: 8px 12px; }
+  .search input { border: none; background: transparent; color: var(--ink); font: inherit; width: 100%; outline: none; }
+  .search svg { width: 16px; height: 16px; color: var(--ink-faint); flex: none; }
+  .seg { display: inline-flex; background: var(--bg-2); border: 1px solid var(--line); border-radius: 11px; padding: 3px; gap: 2px; }
+  .seg button { border: none; background: transparent; color: var(--ink-soft); font: inherit; font-size: 12.5px; font-weight: 650;
+    padding: 6px 12px; border-radius: 8px; cursor: pointer; white-space: nowrap; }
+  .seg button[aria-pressed="true"] { background: var(--panel-2); color: var(--ink); box-shadow: var(--shadow-sm); }
+  .filterbar { display: flex; gap: 7px; flex-wrap: wrap; }
+  .chip-f {
+    border: 1px solid var(--line); background: var(--bg-2); color: var(--ink-soft);
+    font: inherit; font-size: 12px; font-weight: 650; padding: 6px 11px; border-radius: 999px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px; transition: .13s;
+  }
+  .chip-f .swatch { width: 8px; height: 8px; border-radius: 50%; }
+  .chip-f[aria-pressed="true"] { color: var(--ink); border-color: currentColor; background: var(--panel-2); }
+  .manager-only { display: none; }
+  body.mgr .manager-only { display: inline-flex; }
+  body.mgr .manager-only.grid { display: grid; }
+
+  /* ---------- roster ---------- */
+  .roster { display: flex; flex-direction: column; gap: 10px; }
+  .row {
+    display: grid; grid-template-columns: 46px 60px 1fr auto; align-items: center; gap: 14px;
+    background: linear-gradient(100deg, var(--panel), var(--panel));
+    border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 12px 16px 12px 12px; box-shadow: var(--shadow-sm);
+    transition: transform .14s ease, border-color .15s ease, box-shadow .15s;
+    position: relative; overflow: hidden;
+  }
+  .row::before { content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background: var(--tier-c, var(--line)); }
+  .row:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--tier-c) 45%, var(--line)); }
+  .rank { font-family: var(--font-display); font-weight: 800; font-size: 27px; text-align: center; color: var(--ink-faint);
+    font-variant-numeric: tabular-nums; }
+  .row.top1 .rank { color: var(--accent); }
+  .row.top2 .rank { color: var(--ink-soft); }
+  .row.top3 .rank { color: var(--ink-faint); }
+  .rank .medal { display:block; font-size: 11px; letter-spacing:.08em; color: var(--ink-faint); font-family: var(--font-ui); font-weight:700; }
+
+  .avatar { width: 60px; height: 60px; border-radius: 15px; object-fit: cover; display: grid; place-items: center;
+    font-family: var(--font-display); font-weight: 800; font-size: 24px; color: #fff; text-transform: uppercase;
+    border: 2px solid var(--tier-c, var(--line)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--tier-c) 16%, transparent);
+    overflow: hidden; }
+  .person { min-width: 0; }
+  .name { font-family: var(--font-display); font-weight: 800; font-size: clamp(20px, 2.4vw, 27px); line-height: 1;
+    text-transform: uppercase; letter-spacing: .01em; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .tierbadge { font-family: var(--font-ui); font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--tier-c); border: 1.5px solid var(--tier-c); border-radius: 999px; padding: 3px 10px;
+    background: var(--tier-c); box-shadow: var(--shadow-sm); }
+  .lastcall { font-size: 13px; color: var(--ink-soft); margin-top: 7px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .calltag { font-weight: 750; color: var(--ink); background: var(--panel-2); border: 1px solid var(--line);
+    padding: 2px 8px; border-radius: 7px; font-size: 12px; letter-spacing: .01em;
+    border-left: 3px solid var(--accent); }
+  .lastcall .note { color: var(--ink-faint); font-style: italic; }
+  .lastcall .src { font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-faint); font-weight: 700; }
+
+  .score { display: flex; align-items: center; gap: 14px; }
+  .count { text-align: right; }
+  .count .n { font-family: var(--font-display); font-weight: 800; font-size: 38px; line-height: .85;
+    font-variant-numeric: tabular-nums; }
+  .count .l { font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: var(--ink-faint); font-weight: 750; }
+  .wk { display:inline-flex; align-items:center; gap:5px; font-size: 11px; font-weight: 750; color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent); border-radius: 999px; padding: 2px 8px; margin-top:5px; }
+  .rowbtns { display: flex; gap: 6px; }
+  .rowbtns .btn-icon { padding: 8px; }
+  body:not(.mgr) .rowbtns { display: none; }
+  body:not(.mgr) .row { grid-template-columns: 46px 60px 1fr auto; }
+
+  .progress { height: 5px; border-radius: 999px; background: var(--line-soft); overflow: hidden; margin-top: 10px; }
+  .progress > i { display: block; height: 100%; background: var(--tier-c); border-radius: 999px; }
+  .nexttier { font-size: 11px; color: var(--ink-faint); margin-top: 5px; }
+  .nexttier b { color: var(--ink-soft); }
+
+  .empty { text-align: center; padding: 60px 20px; color: var(--ink-faint); }
+  .empty h3 { font-family: var(--font-display); font-size: 26px; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 6px; }
+
+  /* ---------- footer ---------- */
+  .foot { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--ink-faint);
+    font-size: 12.5px; display: flex; flex-wrap: wrap; gap: 10px 20px; justify-content: space-between; align-items: center; }
+  .foot .mantra { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .04em; color: var(--ink-soft); font-size: 15px; }
+
+  /* ---------- modal ---------- */
+  .scrim { position: fixed; inset: 0; background: rgba(4,10,7,.62); backdrop-filter: blur(3px);
+    display: none; align-items: center; justify-content: center; padding: 18px; z-index: 50; }
+  .scrim.open { display: flex; }
+  .modal { width: min(560px, 100%); max-height: 90vh; overflow-y: auto;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); }
+  .modal-h { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    padding: 20px 22px 6px; }
+  .modal-h h2 { font-family: var(--font-display); text-transform: uppercase; font-size: 26px; margin: 0; letter-spacing: .01em; }
+  .modal-h p { margin: 4px 0 0; color: var(--ink-soft); font-size: 13px; }
+  .modal-b { padding: 12px 22px 22px; display: flex; flex-direction: column; gap: 15px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field > label { font-size: 12px; font-weight: 750; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft); }
+  .field input[type=text], .field textarea, .field select {
+    font: inherit; color: var(--ink); background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: 11px; padding: 11px 13px; width: 100%; outline: none; transition: border-color .14s; }
+  .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--accent); }
+  .field textarea { resize: vertical; min-height: 62px; }
+  .field .hint { font-size: 11.5px; color: var(--ink-faint); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .photo-pick { display: flex; align-items: center; gap: 14px; }
+  .photo-prev { width: 72px; height: 72px; border-radius: 16px; border: 2px dashed var(--line); display: grid; place-items: center;
+    color: var(--ink-faint); font-size: 11px; text-align: center; overflow: hidden; background: var(--bg-2); flex: none;
+    font-family: var(--font-display); text-transform: uppercase; }
+  .photo-prev img { width: 100%; height: 100%; object-fit: cover; }
+  .calloutgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap: 8px; }
+  .co { text-align: left; border: 1px solid var(--line); background: var(--bg-2); border-radius: 11px; padding: 9px 11px;
+    cursor: pointer; transition: .12s; border-left: 3px solid var(--accent); }
+  .co:hover { border-color: var(--accent); }
+  .co[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 15%, var(--bg-2)); border-color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent); }
+  .co .t { font-weight: 800; font-size: 13px; }
+  .co .d { font-size: 11px; color: var(--ink-faint); margin-top: 2px; line-height: 1.3; }
+  .srcseg { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; }
+  .srcseg button { border: 1px solid var(--line); background: var(--bg-2); color: var(--ink-soft); font: inherit; font-weight: 700;
+    font-size: 12.5px; padding: 9px; border-radius: 11px; cursor: pointer; }
+  .srcseg button[aria-pressed="true"] { background: var(--panel-2); color: var(--ink); border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .srcseg button small { display: block; font-weight: 600; font-size: 10px; color: var(--ink-faint); margin-top: 2px; }
+  .modal-f { display: flex; gap: 10px; justify-content: space-between; align-items: center; padding-top: 4px; flex-wrap: wrap; }
+  .modal-f .right { display: flex; gap: 10px; margin-left: auto; }
+  .checkline { display: flex; align-items: center; gap: 9px; font-size: 13px; color: var(--ink-soft); }
+  .checkline input { width: 17px; height: 17px; accent-color: var(--accent); }
+
+  .hist { display: flex; flex-direction: column; gap: 8px; }
+  .hist-item { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; background: var(--bg-2);
+    border: 1px solid var(--line); border-radius: 11px; border-left: 3px solid var(--accent); }
+  .hist-item .ci { flex: 1; min-width: 0; }
+  .hist-item .ct { font-weight: 800; font-size: 13px; }
+  .hist-item .cn { font-size: 12.5px; color: var(--ink-soft); margin-top: 2px; }
+  .hist-item .cd { font-size: 11px; color: var(--ink-faint); margin-top: 3px; text-transform: uppercase; letter-spacing: .05em; }
+  .hist-item button { flex: none; }
+
+  .toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(20px);
+    background: var(--ink); color: var(--bg); font-weight: 700; font-size: 13.5px; padding: 12px 20px; border-radius: 999px;
+    box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: .25s; z-index: 90; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .tier-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 11.5px; color: var(--ink-soft); }
+  .tier-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .tier-legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+  /* board mode: hide chrome for the BOH display */
+  body.board .controls, body.board .toolbar .hide-board, body.board .rowbtns,
+  body.board .nexttier, body.board .progress { display: none !important; }
+  body.board .row { padding-top: 14px; padding-bottom: 14px; }
+
+  @media (max-width: 640px) {
+    .row { grid-template-columns: 34px 48px 1fr; grid-auto-flow: row; }
+    .avatar { width: 48px; height: 48px; font-size: 19px; }
+    .score { grid-column: 1 / -1; justify-content: flex-end; border-top: 1px solid var(--line-soft);
+      padding-top: 10px; margin-top: 2px; }
+    .rank { font-size: 22px; }
+    .grid2 { grid-template-columns: 1fr; }
+  }
+  .sync-line { margin-top: 8px; }
+  .sync { display:inline-block; font-size: 11px; font-weight: 750; letter-spacing:.04em; padding: 3px 10px; border-radius: 999px; border:1px solid var(--line); color: var(--ink-faint); }
+  .sync.ok { color: var(--good); border-color: color-mix(in srgb, var(--good) 40%, var(--line)); }
+  .sync.busy { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); }
+  .sync.warn { color: #e0705f; border-color: #e0705f55; }
+  body.board .sync-line { display:none; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  /* ---------- tabs ---------- */
+  .tabs { display: inline-flex; gap: 4px; padding: 4px; margin-bottom: 18px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-sm); }
+  .tab { display: inline-flex; align-items: center; gap: 8px; border: none; background: transparent; cursor: pointer;
+    font-family: var(--font-ui); font-size: 13.5px; font-weight: 700; color: var(--ink-soft);
+    padding: 9px 16px; border-radius: 10px; transition: .14s; letter-spacing: .01em; }
+  .tab svg { width: 16px; height: 16px; }
+  .tab:hover { color: var(--ink); }
+  .tab[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); box-shadow: var(--shadow-sm); }
+  .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  body.board .tabs { display: none; }
+  .tab.manager-only { display: none; }
+  body.mgr .tab.manager-only { display: inline-flex; }
+  .tab.owner-only { display: none; }
+  body.owner .tab.owner-only { display: inline-flex; }
+
+  /* ---------- share / QR ---------- */
+  .qr-card { background: #fff; border-radius: 16px; padding: 18px; width: 240px; max-width: 100%; margin: 0 auto;
+    box-shadow: var(--shadow-sm); border: 1px solid var(--line); }
+  .qr-card svg { width: 100%; height: auto; display: block; }
+  #shareUrl { font-family: var(--font-mono, ui-monospace, Menlo, monospace); font-size: 12.5px; }
+
+  /* ---------- managers & codes (owner-only) ---------- */
+  .codes-list { display: flex; flex-direction: column; gap: 8px; }
+  .code-row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 14px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 11px 14px; box-shadow: var(--shadow-sm); }
+  .code-row .cr-name { font-family: var(--font-display); text-transform: uppercase; font-weight: 800; font-size: 19px; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .code-row .cr-tags { display: flex; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
+  .cr-tag { font-family: var(--font-ui); font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-faint); }
+  .cr-tag.owner { color: var(--accent); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+  .cr-tag.board { color: var(--highlight); border-color: var(--highlight); }
+  .code-row .cr-code { font-family: var(--font-mono, ui-monospace, "SF Mono", Menlo, monospace); font-size: 20px; font-weight: 700;
+    letter-spacing: .18em; color: var(--ink); background: var(--bg-2); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; min-width: 92px; text-align: center; font-variant-numeric: tabular-nums; }
+  .code-row .cr-acts { display: flex; gap: 6px; }
+  @media (max-width: 640px){ .code-row { grid-template-columns: 1fr auto; } .code-row .cr-acts { grid-column: 1 / -1; justify-content: flex-end; } }
+
+  /* ---------- how it works (read-only, teammate-facing) ---------- */
+  .how-intro { background: linear-gradient(160deg, var(--panel), var(--panel-2)); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow-sm); margin-bottom: 22px; }
+  .how-h { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(22px,3vw,30px); margin: 0 0 8px; letter-spacing: .01em; }
+  .how-intro p { margin: 0; color: var(--ink-soft); font-size: 14.5px; max-width: 68ch; }
+  .how-sec { font-family: var(--font-display); text-transform: uppercase; font-size: 20px; letter-spacing: .02em;
+    margin: 26px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--line); }
+  .how-note, .how-foot { color: var(--ink-soft); font-size: 13.5px; margin: -4px 0 14px; max-width: 70ch; }
+  .how-foot { margin-top: 16px; font-style: italic; }
+  .tier-ladder { display: flex; flex-direction: column; gap: 8px; }
+  .tier-card { display: grid; grid-template-columns: 150px 1fr 1.2fr; gap: 16px; align-items: start;
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm);
+    padding: 14px 16px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+  .tier-card::before { content:""; position:absolute; left:0; top:0; bottom:0; width:5px; background: var(--tier-c); }
+  .tier-card .tc-name { font-family: var(--font-display); text-transform: uppercase; font-weight: 800; font-size: 20px;
+    display: inline-flex; align-items: center; }
+  .tier-card .tc-name span { background: var(--tier-c); color: var(--tc-ink); padding: 3px 11px; border-radius: 999px; box-shadow: var(--shadow-sm); }
+  .tier-card .tc-blurb { font-size: 12px; color: var(--ink-faint); margin-top: 6px; }
+  .tier-card .lbl { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); font-weight: 800; display:block; margin-bottom: 3px; }
+  .tier-card .tc-earn, .tier-card .tc-reward { font-size: 13px; color: var(--ink-soft); }
+  .tier-card .tc-earn b { color: var(--ink); }
+  .callout-glossary { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap: 10px; }
+  .gloss { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+    border-radius: var(--radius-sm); padding: 12px 14px; box-shadow: var(--shadow-sm); }
+  .gloss .g-t { font-family: var(--font-display); text-transform: uppercase; font-weight: 800; font-size: 16px; letter-spacing: .01em; }
+  .gloss .g-d { font-size: 12.5px; color: var(--ink-soft); margin-top: 4px; }
+  .how-sources { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 10px; }
+  .src-card { background: linear-gradient(160deg, var(--panel), var(--panel-2)); border: 1px solid var(--line);
+    border-radius: var(--radius-sm); padding: 14px 16px; box-shadow: var(--shadow-sm); }
+  .src-card .src-t { font-family: var(--font-display); text-transform: uppercase; font-weight: 800; font-size: 16px; color: var(--accent); margin-bottom: 5px; }
+  .src-card p { margin: 0; font-size: 12.5px; color: var(--ink-soft); }
+  @media (max-width: 640px) { .tier-card { grid-template-columns: 1fr; gap: 8px; } }
+
+  /* ---------- team roster (management) ---------- */
+  .team-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px; margin-bottom: 16px; }
+  .team-title { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(24px,3.4vw,32px); margin: 0; letter-spacing: .01em; }
+  .team-sub { margin: 4px 0 0; color: var(--ink-soft); font-size: 13.5px; }
+  .team-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .team-list { display: flex; flex-direction: column; gap: 8px; }
+  .trow { display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 14px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm);
+    padding: 10px 12px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+  .trow::before { content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background: var(--tier-c, var(--line)); }
+  .trow .avatar { width: 48px; height: 48px; font-size: 19px; border-radius: 13px; }
+  .trow .tname { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 20px; line-height: 1;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .trow .tmeta { font-size: 12.5px; color: var(--ink-soft); margin-top: 5px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .trow .tmeta b { color: var(--ink); font-variant-numeric: tabular-nums; }
+  .trow .tactions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  @media (max-width: 620px) {
+    .trow { grid-template-columns: 44px 1fr; }
+    .trow .tactions { grid-column: 1 / -1; justify-content: flex-start; border-top: 1px solid var(--line-soft); padding-top: 9px; margin-top: 2px; }
+  }
+  .btn.danger { color: #e0705f; border-color: color-mix(in srgb, #e0705f 45%, var(--line)); }
+  .btn.danger:hover { background: color-mix(in srgb, #e0705f 12%, transparent); border-color: #e0705f; }
+  .btn.solid.danger { background: #d9604f; color: #fff; border-color: transparent; }
+
+  .tabs { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { white-space: nowrap; flex: none; }
+
+  /* ---------- recent feed ---------- */
+  .feed { display: flex; flex-direction: column; gap: 8px; }
+  .fitem { display: grid; grid-template-columns: 44px 1fr auto; gap: 13px; align-items: center;
+    background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+    border-radius: var(--radius-sm); padding: 11px 14px; box-shadow: var(--shadow-sm); }
+  .fitem .avatar { width: 44px; height: 44px; font-size: 17px; border-radius: 12px; }
+  .fitem .fline { font-size: 14px; color: var(--ink-soft); }
+  .fitem .fline b { color: var(--ink); font-family: var(--font-display); text-transform: uppercase; font-weight: 800; font-size: 17px; letter-spacing: .01em; }
+  .fitem .ftype { color: var(--ink); font-weight: 750; }
+  .fitem .fnote { font-size: 12.5px; color: var(--ink-faint); font-style: italic; margin-top: 3px; }
+  .fitem .fmeta { text-align: right; font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; font-weight: 700; color: var(--ink-faint); white-space: nowrap; }
+  .fitem .fmeta .src { display: block; color: var(--accent); }
+
+  /* ---------- wall ---------- */
+  .wall-tier { margin-bottom: 22px; }
+  .wall-tier .wt-label { font-family: var(--font-display); text-transform: uppercase; font-size: 18px; letter-spacing: .03em;
+    display: inline-flex; align-items: center; gap: 9px; margin: 0 0 12px; }
+  .wall-tier .wt-label i { width: 12px; height: 12px; border-radius: 3px; }
+  .wall-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap: 12px; }
+  .honor { text-align: center; background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    border: 1px solid var(--line); border-top: 4px solid var(--tier-c); border-radius: var(--radius);
+    padding: 18px 12px 14px; box-shadow: var(--shadow-sm); }
+  .honor .avatar { width: 74px; height: 74px; font-size: 27px; margin: 0 auto 10px; border-radius: 18px; }
+  .honor .hn { font-family: var(--font-display); text-transform: uppercase; font-weight: 800; font-size: 18px; line-height: 1; }
+  .honor .htier { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--tier-c); margin-top: 6px; }
+  .honor .hc { font-size: 11.5px; color: var(--ink-faint); margin-top: 4px; font-variant-numeric: tabular-nums; }
+
+  /* ---------- nominations queue ---------- */
+  .nom-queue { background: color-mix(in srgb, var(--accent) 8%, var(--panel)); border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+    border-radius: var(--radius); padding: 16px 18px; margin-bottom: 18px; box-shadow: var(--shadow-sm); }
+  .nom-count { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px;
+    background: var(--accent); color: var(--accent-ink); font-family: var(--font-ui); font-size: 12px; font-weight: 800; vertical-align: middle; }
+  .nom-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+  .nom-item { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 11px 13px; }
+  .nom-item .ni-t { font-weight: 750; font-size: 13.5px; }
+  .nom-item .ni-t b { font-family: var(--font-display); text-transform: uppercase; font-size: 15px; }
+  .nom-item .ni-note { font-size: 12.5px; color: var(--ink-soft); font-style: italic; margin-top: 3px; }
+  .nom-item .ni-by { font-size: 11px; color: var(--ink-faint); margin-top: 3px; text-transform: uppercase; letter-spacing: .05em; }
+  .nom-item .ni-act { display: flex; gap: 6px; }
+  .mgr-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .mgr-row { display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 8px 12px; }
+  .mgr-name { font-weight: 750; font-size: 13.5px; }
+  .mgr-name .you { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 999px; padding: 1px 6px; margin-left: 6px; }
+  .mgr-acts { display: flex; gap: 6px; }
+  .nom-badge { display: none; margin-left: 4px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px;
+    background: var(--accent); color: var(--accent-ink); font-size: 11px; font-weight: 800; place-items: center; }
+  body.has-noms .tab[data-view="team"] .nom-badge, body.has-noms #mgrBtn .nom-badge { display: inline-grid; }
+
+  /* ---------- huddle overlay ---------- */
+  .modal.huddle { width: min(720px, 100%); }
+  .huddle-body { display: flex; flex-direction: column; gap: 10px; }
+  .hud { border-left: 4px solid var(--accent); background: var(--bg-2); border-radius: var(--radius-sm); padding: 13px 16px; }
+  .hud .hud-line { font-size: 16px; line-height: 1.5; }
+  .hud .hud-line .nm { font-family: var(--font-display); text-transform: uppercase; font-weight: 800; font-size: 19px; }
+  .hud .hud-line .ty { font-weight: 800; color: var(--accent); }
+  .hud .hud-cheer { font-size: 12px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; margin-top: 7px; }
+  .huddle-empty { text-align: center; color: var(--ink-faint); padding: 24px; }
+
+  /* ---------- print ---------- */
+  @media print {
+    .toolbar, .tabs, .controls, .foot, .rowbtns, .nexttier, .progress, #view-team, #view-recent, #view-how, #view-wall, .scrim { display: none !important; }
+    .wrap { background: #fff !important; color: #000 !important; padding: 0; }
+    .row, .tile { break-inside: avoid; box-shadow: none !important; border-color: #ccc !important; }
+    h1 { color: #0A693C !important; -webkit-text-fill-color: #0A693C !important; }
+    body { background: #fff !important; }
+  }
+</style>
+
+<div class="wrap">
+  <div class="shell">
+    <header class="top">
+      <div class="brand">
+        <div class="eyebrow"><span class="dot"></span> Mammoth Clubhouse · Wichita, KS</div>
+        <div class="sync-line"><span id="syncStatus" class="sync">● Connecting…</span></div>
+        <h1>The Leaderboard</h1>
+        <p class="sub">No sidelines. No spectators. Every teammate on this roster is in the game — <b>tee box to Legend</b>. Every callout earns a step up.</p>
+      </div>
+      <div class="toolbar">
+        <button class="btn solid hide-board" id="nominateBtn" title="Nominate a teammate for a callout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.9 6.3L22 9.2l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-.9z"/></svg>
+          Nominate
+        </button>
+        <button class="btn ghost hide-board" id="shareBtn" title="QR code and link to the board">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M20 14v.01M14 20h.01M17 20h4v-3"/></svg>
+          Share
+        </button>
+        <button class="btn ghost hide-board" id="themeBtn" title="Toggle light / dark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          Theme
+        </button>
+        <button class="btn ghost" id="boardBtn" title="Hide manager tools for the display screen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg>
+          Board mode
+        </button>
+        <button class="btn ghost" id="mgrBtn" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-2.9 1.2 2 2 0 11-4 0 1.7 1.7 0 00-2.9-1.2l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00-1.2-2.9 2 2 0 010-4 1.7 1.7 0 001.2-2.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3 1.7 1.7 0 001-1.5 2 2 0 014 0 1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9 1.7 1.7 0 001.5 1 2 2 0 010 4 1.7 1.7 0 00-1.5 1z"/></svg>
+          Manager<span class="nom-badge" id="nomBadgeMgr">0</span>
+        </button>
+      </div>
+    </header>
+
+    <nav class="tabs" role="tablist" aria-label="Views">
+      <button class="tab" data-view="board" role="tab" aria-selected="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l3-4 3 2 4-6"/></svg>
+        The Board
+      </button>
+      <button class="tab" data-view="recent" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg>
+        Recent
+      </button>
+      <button class="tab" data-view="wall" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 01-10 0zM17 5h3v2a3 3 0 01-3 3M7 5H4v2a3 3 0 003 3"/></svg>
+        Wall
+      </button>
+      <button class="tab" data-view="how" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 015.8 1c0 2-3 3-3 3M12 17h.01"/></svg>
+        How It Works
+      </button>
+      <button class="tab manager-only" data-view="team" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8"/></svg>
+        Team Roster<span class="nom-badge" id="nomBadgeTab">0</span>
+      </button>
+      <button class="tab owner-only" data-view="codes" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1l9 4v6c0 5-3.8 9.4-9 11-5.2-1.6-9-6-9-11V5z"/><path d="M9 12l2 2 4-4"/></svg>
+        Managers
+      </button>
+    </nav>
+
+    <div id="view-board">
+      <section class="strip" id="strip"></section>
+
+      <section class="controls">
+        <label class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="search" placeholder="Search the roster…" aria-label="Search roster">
+        </label>
+        <div class="seg" role="group" aria-label="Sort">
+          <button data-sort="callouts" aria-pressed="true">Callouts</button>
+          <button data-sort="week">This week</button>
+          <button data-sort="name">Name</button>
+        </div>
+        <div class="filterbar" id="tierFilter"></div>
+        <div style="flex:1"></div>
+        <button class="btn ghost" id="printBtn" title="Print or save the board as a PDF">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg> Print
+        </button>
+        <button class="btn solid manager-only" id="addBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Teammate
+        </button>
+        <button class="btn manager-only" id="logBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.9 6.3L22 9.2l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-.9z"/></svg> Log callout
+        </button>
+        <button class="btn ghost manager-only" id="backupBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Backup
+        </button>
+      </section>
+
+      <section class="roster" id="roster"></section>
+    </div>
+
+    <div id="view-recent" hidden>
+      <section class="team-head">
+        <div>
+          <h2 class="team-title">Recent Callouts</h2>
+          <p class="team-sub">Every recognition, newest first. Read one out loud at pre-shift.</p>
+        </div>
+        <div class="team-actions">
+          <div class="seg" role="group" aria-label="Range" id="recentRange">
+            <button data-range="24h">Last 24h</button>
+            <button data-range="7d" aria-pressed="true">This week</button>
+            <button data-range="all">All</button>
+          </div>
+          <button class="btn solid" id="huddleBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg> Pre-shift huddle
+          </button>
+        </div>
+      </section>
+      <section class="feed" id="recentFeed"></section>
+    </div>
+
+    <div id="view-wall" hidden>
+      <section class="how-intro">
+        <h2 class="how-h">The Wall — earned, not given</h2>
+        <p>All-Star and above. These teammates changed what this team looks like. When a Legend is named, the whole team gathers and that name goes up permanently.</p>
+      </section>
+      <section id="wall"></section>
+    </div>
+
+    <div id="view-team" hidden>
+      <section class="nom-queue" id="nomQueueWrap" hidden>
+        <div class="nom-head">
+          <h3 class="how-sec" style="margin:0;border:none;padding:0">Pending nominations <span class="nom-count" id="nomCount">0</span></h3>
+          <p class="team-sub" style="margin:2px 0 0">Teammate-submitted callouts waiting on your call. Approving logs a teammate-nominated callout.</p>
+        </div>
+        <div class="nom-list" id="nomList"></div>
+      </section>
+      <section class="team-head">
+        <div>
+          <h2 class="team-title">Team Roster</h2>
+          <p class="team-sub" id="teamCount">Everyone on the roster, in one place.</p>
+          <p class="team-sub" id="teamLastUnlock" style="margin-top:2px"></p>
+        </div>
+        <div class="team-actions">
+          <button class="btn solid" id="addBtn2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Add teammate
+          </button>
+          <button class="btn ghost" id="activityBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 106 5.3L3 8"/><path d="M12 7v5l4 2"/></svg> Activity log
+          </button>
+          <button class="btn ghost" id="backupBtn2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Backup / Restore
+          </button>
+        </div>
+      </section>
+      <section class="team-list" id="teamList"></section>
+    </div>
+
+    <div id="view-codes" hidden>
+      <section class="team-head">
+        <div>
+          <h2 class="team-title">Managers &amp; codes</h2>
+          <p class="team-sub" id="codesSub">Only you can see this tab. Everyone's unlock PIN lives here.</p>
+        </div>
+        <div class="team-actions">
+          <button class="btn" id="toggleCodes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg> <span id="toggleCodesLabel">Show codes</span>
+          </button>
+          <button class="btn solid" id="addMgrBtn2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Add manager
+          </button>
+        </div>
+      </section>
+      <section class="codes-list" id="codesList"></section>
+    </div>
+
+    <div id="view-how" hidden>
+      <section class="how-intro">
+        <h2 class="how-h">Your path up the roster</h2>
+        <p>At Clubhouse, everyone is elite at something. The Leaderboard exists to find it, name it, and celebrate it out loud. Every callout earns you a step up. No handicaps. No ceiling. Every rep counts.</p>
+      </section>
+
+      <h3 class="how-sec">The Tiers</h3>
+      <section class="tier-ladder" id="howTiers"></section>
+
+      <h3 class="how-sec">The Callouts — say these out loud</h3>
+      <p class="how-note">Like a coach you never forget, how we speak is memorable. Every callout has a name so it can be announced, repeated, and owned.</p>
+      <section class="callout-glossary" id="howCallouts"></section>
+
+      <h3 class="how-sec">How callouts are given</h3>
+      <section class="how-sources">
+        <div class="src-card"><div class="src-t">Coach's Callout</div><p>Your coach sees it on the floor or at the pre-shift huddle. Every huddle includes at least one callout — non-negotiable.</p></div>
+        <div class="src-card"><div class="src-t">Peer Nomination</div><p>Fill out a Peer Callout card or the digital form and drop it in the Callout Box. Anyone can nominate anyone — and teammate nominations count double toward All-Star &amp; Playmaker.</p></div>
+        <div class="src-card"><div class="src-t">Athlete Recognition</div><p>A guest compliment, an online review, or a comment card that names you counts. Your coach logs it the same day.</p></div>
+      </section>
+      <p class="how-foot">The callout is only half of it. The other half is saying it out loud in front of the team. Recognition that stays quiet is a missed swing.</p>
+    </div>
+
+    <footer class="foot">
+      <div class="mantra">Fore the love of the game.</div>
+      <div class="tier-legend" id="legend"></div>
+    </footer>
+  </div>
+</div>
+
+<!-- ============ MODALS ============ -->
+<div class="scrim" id="teammateScrim">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tmTitle">
+    <div class="modal-h">
+      <div><h2 id="tmTitle">Add a teammate</h2><p>They start at the tee box. Callouts move them up.</p></div>
+      <button class="btn btn-icon ghost" data-close aria-label="Close">✕</button>
+    </div>
+    <div class="modal-b">
+      <div class="field">
+        <label>Photo</label>
+        <div class="photo-pick">
+          <div class="photo-prev" id="photoPrev">Add<br>photo</div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <input type="file" id="photoInput" accept="image/*" style="display:none">
+            <button class="btn" type="button" id="photoBtn">Choose photo…</button>
+            <button class="btn ghost" type="button" id="photoClear" style="display:none">Remove</button>
+            <span class="hint">Square works best. Stored on this device only.</span>
+          </div>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label for="tmName">Name</label><input type="text" id="tmName" placeholder="First Last" autocomplete="off"></div>
+        <div class="field"><label for="tmTier">Tier</label>
+          <select id="tmTier"></select>
+          <span class="hint">Auto = calculated from callouts. Override only for judgment-call tiers.</span>
+        </div>
+      </div>
+      <div class="checkline"><input type="checkbox" id="tmMentor"><label for="tmMentor">Has mentored a Rookie <span style="color:var(--ink-faint)">— required for Playmaker</span></label></div>
+      <div class="checkline"><input type="checkbox" id="tmFront"><label for="tmFront">Nominated by peers, coaches <b style="color:var(--ink-soft)">and</b> the front office <span style="color:var(--ink-faint)">— required for Legend</span></label></div>
+      <div class="modal-f">
+        <button class="btn ghost manager-only" id="tmDelete" style="color:#e0705f;border-color:#e0705f55">Delete teammate</button>
+        <div class="right">
+          <button class="btn ghost" data-close>Cancel</button>
+          <button class="btn solid" id="tmSave">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="logScrim">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="logTitle">
+    <div class="modal-h">
+      <div><h2 id="logTitle">Log a callout</h2><p>Name it, say what happened — then say it out loud at pre-shift.</p></div>
+      <button class="btn btn-icon ghost" data-close aria-label="Close">✕</button>
+    </div>
+    <div class="modal-b">
+      <div class="field"><label for="logWho">Teammate</label><select id="logWho"></select></div>
+      <div class="field">
+        <label>Callout</label>
+        <div class="calloutgrid" id="calloutGrid"></div>
+      </div>
+      <div class="field">
+        <label>Who's calling it?</label>
+        <div class="srcseg" id="srcSeg">
+          <button data-src="coach" aria-pressed="true">Coach<small>Manager saw it</small></button>
+          <button data-src="peer">Teammate<small>Counts double</small></button>
+          <button data-src="athlete">Athlete<small>Guest / review</small></button>
+        </div>
+      </div>
+      <div class="field"><label for="logNote">What happened <span style="text-transform:none;color:var(--ink-faint);font-weight:400">(one sentence)</span></label>
+        <textarea id="logNote" placeholder="Taylor saw I was in the weeds on a six-top and jumped in without a word."></textarea>
+      </div>
+      <div class="modal-f"><div class="right">
+        <button class="btn ghost" data-close>Cancel</button>
+        <button class="btn solid" id="logSave">Record callout</button>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="histScrim">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="histTitle">
+    <div class="modal-h"><div><h2 id="histTitle">Callout history</h2><p id="histSub"></p></div>
+      <button class="btn btn-icon ghost" data-close aria-label="Close">✕</button></div>
+    <div class="modal-b"><div class="hist" id="histList"></div></div>
+  </div>
+</div>
+
+<div class="scrim" id="activityScrim">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="actTitle">
+    <div class="modal-h"><div><h2 id="actTitle">Activity log</h2><p id="actSub">Every manager action, newest first.</p></div>
+      <button class="btn btn-icon ghost" data-close aria-label="Close">✕</button></div>
+    <div class="modal-b"><div class="hist" id="actList"></div></div>
+  </div>
+</div>
+
+<div class="scrim" id="backupScrim">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="bkTitle">
+    <div class="modal-h"><div><h2 id="bkTitle">Backup &amp; restore</h2><p>Move the exact board between devices, or keep a weekly save.</p></div>
+      <button class="btn btn-icon ghost" data-close aria-label="Close">✕</button></div>
+    <div class="modal-b">
+      <p style="margin:0;color:var(--ink-soft);font-size:13.5px">The board saves itself on this device automatically. Use <b>Save backup</b> to download the whole board (names, photos, callouts) as one file, and <b>Restore</b> to load it on the BOH screen or another computer.</p>
+      <div class="modal-f" style="justify-content:flex-start;gap:10px">
+        <button class="btn solid" id="doExport">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Save backup
+        </button>
+        <button class="btn" id="doImport">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 9l5-5 5 5M12 4v12"/></svg> Restore from file…
+        </button>
+        <input type="file" id="importInput" accept="application/json,.json" style="display:none">
+      </div>
+      <div class="field" style="border-top:1px solid var(--line);padding-top:14px;margin-top:2px">
+        <label>Access</label>
+        <span class="hint" id="mgrState"></span>
+        <span class="hint" id="lastUnlockState" style="margin-top:8px"></span>
+      </div>
+      <div class="field" style="border-top:1px solid var(--line);padding-top:14px;margin-top:2px">
+        <label style="color:#e0705f">Danger zone</label>
+        <button class="btn ghost" id="doReset" style="color:#e0705f;border-color:#e0705f55;align-self:flex-start">Reset to the full team roster</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="nominateScrim">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="nomTitle">
+    <div class="modal-h">
+      <div><h2 id="nomTitle">Nominate a teammate</h2><p>Caught someone doing it right? Send it to a coach — approved callouts land on the board.</p></div>
+      <button class="btn btn-icon ghost" data-close aria-label="Close">✕</button>
+    </div>
+    <div class="modal-b">
+      <div class="field"><label for="nomWho">Teammate</label><select id="nomWho"></select></div>
+      <div class="field"><label>Callout</label><div class="calloutgrid" id="nomGrid"></div></div>
+      <div class="field"><label for="nomNote">What happened <span style="text-transform:none;color:var(--ink-faint);font-weight:400">(one sentence)</span></label>
+        <textarea id="nomNote" placeholder="Taylor saw I was in the weeds on a six-top and jumped in without a word."></textarea></div>
+      <div class="field"><label for="nomBy">Your name <span style="text-transform:none;color:var(--ink-faint);font-weight:400">(required — own your cheer)</span></label>
+        <input type="text" id="nomBy" placeholder="Your name" autocomplete="off"></div>
+      <div class="modal-f"><div class="right">
+        <button class="btn ghost" data-close>Cancel</button>
+        <button class="btn solid" id="nomSubmit">Send nomination</button>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="huddleScrim">
+  <div class="modal huddle" role="dialog" aria-modal="true" aria-labelledby="huddleTitle">
+    <div class="modal-h">
+      <div><h2 id="huddleTitle">Pre-Shift Huddle</h2><p id="huddleSub"></p></div>
+      <button class="btn btn-icon ghost" data-close aria-label="Close">✕</button>
+    </div>
+    <div class="modal-b">
+      <div id="huddleBody" class="huddle-body"></div>
+      <div class="modal-f"><div class="right"><button class="btn solid" data-close>Done — go win the shift</button></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="shareScrim">
+  <div class="modal" style="width:min(440px,100%)" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+    <div class="modal-h">
+      <div><h2 id="shareTitle">Share the Leaderboard</h2><p>Scan to open the board on any phone. Print it for the break room or pre-shift.</p></div>
+      <button class="btn btn-icon ghost" data-close aria-label="Close">✕</button>
+    </div>
+    <div class="modal-b">
+      <div id="qrWrap" class="qr-card"><svg viewBox="0 0 37 37" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" role="img" aria-label="QR code to the Leaderboard"><rect width="37" height="37" fill="#ffffff"/><path d="M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM8 0h1v1h-1zM9 0h1v1h-1zM10 0h1v1h-1zM11 0h1v1h-1zM16 0h1v1h-1zM17 0h1v1h-1zM18 0h1v1h-1zM19 0h1v1h-1zM21 0h1v1h-1zM24 0h1v1h-1zM25 0h1v1h-1zM28 0h1v1h-1zM30 0h1v1h-1zM31 0h1v1h-1zM32 0h1v1h-1zM33 0h1v1h-1zM34 0h1v1h-1zM35 0h1v1h-1zM36 0h1v1h-1zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM14 1h1v1h-1zM15 1h1v1h-1zM16 1h1v1h-1zM17 1h1v1h-1zM18 1h1v1h-1zM20 1h1v1h-1zM21 1h1v1h-1zM24 1h1v1h-1zM25 1h1v1h-1zM26 1h1v1h-1zM30 1h1v1h-1zM36 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM6 2h1v1h-1zM8 2h1v1h-1zM9 2h1v1h-1zM11 2h1v1h-1zM12 2h1v1h-1zM13 2h1v1h-1zM15 2h1v1h-1zM18 2h1v1h-1zM20 2h1v1h-1zM21 2h1v1h-1zM22 2h1v1h-1zM23 2h1v1h-1zM25 2h1v1h-1zM26 2h1v1h-1zM27 2h1v1h-1zM28 2h1v1h-1zM30 2h1v1h-1zM32 2h1v1h-1zM33 2h1v1h-1zM34 2h1v1h-1zM36 2h1v1h-1zM0 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM6 3h1v1h-1zM9 3h1v1h-1zM14 3h1v1h-1zM15 3h1v1h-1zM17 3h1v1h-1zM18 3h1v1h-1zM19 3h1v1h-1zM21 3h1v1h-1zM25 3h1v1h-1zM28 3h1v1h-1zM30 3h1v1h-1zM32 3h1v1h-1zM33 3h1v1h-1zM34 3h1v1h-1zM36 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM6 4h1v1h-1zM8 4h1v1h-1zM9 4h1v1h-1zM12 4h1v1h-1zM14 4h1v1h-1zM15 4h1v1h-1zM17 4h1v1h-1zM19 4h1v1h-1zM20 4h1v1h-1zM21 4h1v1h-1zM22 4h1v1h-1zM26 4h1v1h-1zM28 4h1v1h-1zM30 4h1v1h-1zM32 4h1v1h-1zM33 4h1v1h-1zM34 4h1v1h-1zM36 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM9 5h1v1h-1zM11 5h1v1h-1zM12 5h1v1h-1zM13 5h1v1h-1zM14 5h1v1h-1zM16 5h1v1h-1zM17 5h1v1h-1zM18 5h1v1h-1zM21 5h1v1h-1zM23 5h1v1h-1zM25 5h1v1h-1zM28 5h1v1h-1zM30 5h1v1h-1zM36 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM24 6h1v1h-1zM26 6h1v1h-1zM28 6h1v1h-1zM30 6h1v1h-1zM31 6h1v1h-1zM32 6h1v1h-1zM33 6h1v1h-1zM34 6h1v1h-1zM35 6h1v1h-1zM36 6h1v1h-1zM11 7h1v1h-1zM12 7h1v1h-1zM13 7h1v1h-1zM19 7h1v1h-1zM20 7h1v1h-1zM22 7h1v1h-1zM24 7h1v1h-1zM25 7h1v1h-1zM26 7h1v1h-1zM27 7h1v1h-1zM28 7h1v1h-1zM0 8h1v1h-1zM3 8h1v1h-1zM4 8h1v1h-1zM5 8h1v1h-1zM6 8h1v1h-1zM7 8h1v1h-1zM8 8h1v1h-1zM10 8h1v1h-1zM11 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM19 8h1v1h-1zM20 8h1v1h-1zM21 8h1v1h-1zM22 8h1v1h-1zM26 8h1v1h-1zM29 8h1v1h-1zM32 8h1v1h-1zM34 8h1v1h-1zM35 8h1v1h-1zM36 8h1v1h-1zM2 9h1v1h-1zM3 9h1v1h-1zM7 9h1v1h-1zM8 9h1v1h-1zM10 9h1v1h-1zM11 9h1v1h-1zM20 9h1v1h-1zM22 9h1v1h-1zM23 9h1v1h-1zM24 9h1v1h-1zM25 9h1v1h-1zM26 9h1v1h-1zM27 9h1v1h-1zM28 9h1v1h-1zM31 9h1v1h-1zM32 9h1v1h-1zM33 9h1v1h-1zM34 9h1v1h-1zM35 9h1v1h-1zM1 10h1v1h-1zM3 10h1v1h-1zM5 10h1v1h-1zM6 10h1v1h-1zM8 10h1v1h-1zM9 10h1v1h-1zM10 10h1v1h-1zM12 10h1v1h-1zM13 10h1v1h-1zM17 10h1v1h-1zM18 10h1v1h-1zM21 10h1v1h-1zM22 10h1v1h-1zM23 10h1v1h-1zM26 10h1v1h-1zM27 10h1v1h-1zM29 10h1v1h-1zM30 10h1v1h-1zM31 10h1v1h-1zM32 10h1v1h-1zM33 10h1v1h-1zM36 10h1v1h-1zM1 11h1v1h-1zM3 11h1v1h-1zM4 11h1v1h-1zM7 11h1v1h-1zM8 11h1v1h-1zM9 11h1v1h-1zM10 11h1v1h-1zM12 11h1v1h-1zM13 11h1v1h-1zM14 11h1v1h-1zM15 11h1v1h-1zM17 11h1v1h-1zM22 11h1v1h-1zM24 11h1v1h-1zM26 11h1v1h-1zM27 11h1v1h-1zM31 11h1v1h-1zM32 11h1v1h-1zM34 11h1v1h-1zM35 11h1v1h-1zM36 11h1v1h-1zM0 12h1v1h-1zM3 12h1v1h-1zM5 12h1v1h-1zM6 12h1v1h-1zM8 12h1v1h-1zM9 12h1v1h-1zM11 12h1v1h-1zM18 12h1v1h-1zM19 12h1v1h-1zM23 12h1v1h-1zM24 12h1v1h-1zM26 12h1v1h-1zM27 12h1v1h-1zM28 12h1v1h-1zM30 12h1v1h-1zM31 12h1v1h-1zM33 12h1v1h-1zM36 12h1v1h-1zM2 13h1v1h-1zM3 13h1v1h-1zM4 13h1v1h-1zM5 13h1v1h-1zM7 13h1v1h-1zM8 13h1v1h-1zM10 13h1v1h-1zM12 13h1v1h-1zM13 13h1v1h-1zM14 13h1v1h-1zM15 13h1v1h-1zM17 13h1v1h-1zM20 13h1v1h-1zM23 13h1v1h-1zM25 13h1v1h-1zM26 13h1v1h-1zM27 13h1v1h-1zM32 13h1v1h-1zM33 13h1v1h-1zM0 14h1v1h-1zM1 14h1v1h-1zM2 14h1v1h-1zM3 14h1v1h-1zM5 14h1v1h-1zM6 14h1v1h-1zM10 14h1v1h-1zM11 14h1v1h-1zM12 14h1v1h-1zM14 14h1v1h-1zM15 14h1v1h-1zM17 14h1v1h-1zM19 14h1v1h-1zM20 14h1v1h-1zM21 14h1v1h-1zM22 14h1v1h-1zM26 14h1v1h-1zM27 14h1v1h-1zM30 14h1v1h-1zM32 14h1v1h-1zM33 14h1v1h-1zM34 14h1v1h-1zM35 14h1v1h-1zM36 14h1v1h-1zM0 15h1v1h-1zM1 15h1v1h-1zM2 15h1v1h-1zM5 15h1v1h-1zM7 15h1v1h-1zM9 15h1v1h-1zM13 15h1v1h-1zM14 15h1v1h-1zM17 15h1v1h-1zM18 15h1v1h-1zM19 15h1v1h-1zM22 15h1v1h-1zM23 15h1v1h-1zM26 15h1v1h-1zM29 15h1v1h-1zM30 15h1v1h-1zM31 15h1v1h-1zM33 15h1v1h-1zM34 15h1v1h-1zM36 15h1v1h-1zM2 16h1v1h-1zM3 16h1v1h-1zM6 16h1v1h-1zM11 16h1v1h-1zM16 16h1v1h-1zM17 16h1v1h-1zM19 16h1v1h-1zM20 16h1v1h-1zM21 16h1v1h-1zM25 16h1v1h-1zM26 16h1v1h-1zM27 16h1v1h-1zM29 16h1v1h-1zM30 16h1v1h-1zM34 16h1v1h-1zM36 16h1v1h-1zM1 17h1v1h-1zM3 17h1v1h-1zM5 17h1v1h-1zM8 17h1v1h-1zM11 17h1v1h-1zM13 17h1v1h-1zM14 17h1v1h-1zM16 17h1v1h-1zM17 17h1v1h-1zM18 17h1v1h-1zM20 17h1v1h-1zM21 17h1v1h-1zM22 17h1v1h-1zM24 17h1v1h-1zM25 17h1v1h-1zM26 17h1v1h-1zM27 17h1v1h-1zM33 17h1v1h-1zM0 18h1v1h-1zM1 18h1v1h-1zM2 18h1v1h-1zM6 18h1v1h-1zM8 18h1v1h-1zM9 18h1v1h-1zM10 18h1v1h-1zM12 18h1v1h-1zM14 18h1v1h-1zM15 18h1v1h-1zM17 18h1v1h-1zM18 18h1v1h-1zM20 18h1v1h-1zM21 18h1v1h-1zM22 18h1v1h-1zM23 18h1v1h-1zM27 18h1v1h-1zM31 18h1v1h-1zM32 18h1v1h-1zM34 18h1v1h-1zM36 18h1v1h-1zM0 19h1v1h-1zM1 19h1v1h-1zM4 19h1v1h-1zM5 19h1v1h-1zM7 19h1v1h-1zM10 19h1v1h-1zM22 19h1v1h-1zM25 19h1v1h-1zM28 19h1v1h-1zM30 19h1v1h-1zM31 19h1v1h-1zM36 19h1v1h-1zM2 20h1v1h-1zM3 20h1v1h-1zM5 20h1v1h-1zM6 20h1v1h-1zM7 20h1v1h-1zM8 20h1v1h-1zM9 20h1v1h-1zM13 20h1v1h-1zM15 20h1v1h-1zM16 20h1v1h-1zM17 20h1v1h-1zM18 20h1v1h-1zM24 20h1v1h-1zM26 20h1v1h-1zM28 20h1v1h-1zM29 20h1v1h-1zM30 20h1v1h-1zM31 20h1v1h-1zM32 20h1v1h-1zM1 21h1v1h-1zM3 21h1v1h-1zM4 21h1v1h-1zM7 21h1v1h-1zM12 21h1v1h-1zM14 21h1v1h-1zM15 21h1v1h-1zM16 21h1v1h-1zM19 21h1v1h-1zM20 21h1v1h-1zM21 21h1v1h-1zM22 21h1v1h-1zM23 21h1v1h-1zM24 21h1v1h-1zM25 21h1v1h-1zM26 21h1v1h-1zM27 21h1v1h-1zM32 21h1v1h-1zM34 21h1v1h-1zM0 22h1v1h-1zM2 22h1v1h-1zM4 22h1v1h-1zM5 22h1v1h-1zM6 22h1v1h-1zM7 22h1v1h-1zM11 22h1v1h-1zM14 22h1v1h-1zM15 22h1v1h-1zM16 22h1v1h-1zM17 22h1v1h-1zM18 22h1v1h-1zM20 22h1v1h-1zM22 22h1v1h-1zM23 22h1v1h-1zM26 22h1v1h-1zM27 22h1v1h-1zM30 22h1v1h-1zM31 22h1v1h-1zM33 22h1v1h-1zM36 22h1v1h-1zM1 23h1v1h-1zM2 23h1v1h-1zM3 23h1v1h-1zM8 23h1v1h-1zM9 23h1v1h-1zM11 23h1v1h-1zM12 23h1v1h-1zM15 23h1v1h-1zM17 23h1v1h-1zM20 23h1v1h-1zM21 23h1v1h-1zM22 23h1v1h-1zM23 23h1v1h-1zM31 23h1v1h-1zM32 23h1v1h-1zM33 23h1v1h-1zM34 23h1v1h-1zM36 23h1v1h-1zM0 24h1v1h-1zM1 24h1v1h-1zM2 24h1v1h-1zM6 24h1v1h-1zM7 24h1v1h-1zM8 24h1v1h-1zM11 24h1v1h-1zM13 24h1v1h-1zM15 24h1v1h-1zM16 24h1v1h-1zM17 24h1v1h-1zM18 24h1v1h-1zM19 24h1v1h-1zM21 24h1v1h-1zM23 24h1v1h-1zM27 24h1v1h-1zM28 24h1v1h-1zM29 24h1v1h-1zM30 24h1v1h-1zM36 24h1v1h-1zM0 25h1v1h-1zM1 25h1v1h-1zM5 25h1v1h-1zM8 25h1v1h-1zM13 25h1v1h-1zM14 25h1v1h-1zM16 25h1v1h-1zM19 25h1v1h-1zM20 25h1v1h-1zM23 25h1v1h-1zM24 25h1v1h-1zM25 25h1v1h-1zM26 25h1v1h-1zM27 25h1v1h-1zM29 25h1v1h-1zM31 25h1v1h-1zM32 25h1v1h-1zM33 25h1v1h-1zM0 26h1v1h-1zM1 26h1v1h-1zM3 26h1v1h-1zM4 26h1v1h-1zM6 26h1v1h-1zM7 26h1v1h-1zM9 26h1v1h-1zM12 26h1v1h-1zM14 26h1v1h-1zM16 26h1v1h-1zM18 26h1v1h-1zM19 26h1v1h-1zM20 26h1v1h-1zM24 26h1v1h-1zM27 26h1v1h-1zM28 26h1v1h-1zM30 26h1v1h-1zM31 26h1v1h-1zM33 26h1v1h-1zM34 26h1v1h-1zM35 26h1v1h-1zM36 26h1v1h-1zM0 27h1v1h-1zM3 27h1v1h-1zM7 27h1v1h-1zM8 27h1v1h-1zM9 27h1v1h-1zM14 27h1v1h-1zM15 27h1v1h-1zM18 27h1v1h-1zM20 27h1v1h-1zM22 27h1v1h-1zM23 27h1v1h-1zM24 27h1v1h-1zM27 27h1v1h-1zM29 27h1v1h-1zM30 27h1v1h-1zM31 27h1v1h-1zM32 27h1v1h-1zM34 27h1v1h-1zM36 27h1v1h-1zM0 28h1v1h-1zM2 28h1v1h-1zM6 28h1v1h-1zM7 28h1v1h-1zM8 28h1v1h-1zM9 28h1v1h-1zM10 28h1v1h-1zM14 28h1v1h-1zM16 28h1v1h-1zM18 28h1v1h-1zM22 28h1v1h-1zM23 28h1v1h-1zM24 28h1v1h-1zM25 28h1v1h-1zM27 28h1v1h-1zM28 28h1v1h-1zM29 28h1v1h-1zM30 28h1v1h-1zM31 28h1v1h-1zM32 28h1v1h-1zM34 28h1v1h-1zM36 28h1v1h-1zM8 29h1v1h-1zM12 29h1v1h-1zM15 29h1v1h-1zM16 29h1v1h-1zM19 29h1v1h-1zM20 29h1v1h-1zM22 29h1v1h-1zM28 29h1v1h-1zM32 29h1v1h-1zM34 29h1v1h-1zM0 30h1v1h-1zM1 30h1v1h-1zM2 30h1v1h-1zM3 30h1v1h-1zM4 30h1v1h-1zM5 30h1v1h-1zM6 30h1v1h-1zM8 30h1v1h-1zM11 30h1v1h-1zM14 30h1v1h-1zM15 30h1v1h-1zM16 30h1v1h-1zM19 30h1v1h-1zM21 30h1v1h-1zM22 30h1v1h-1zM23 30h1v1h-1zM24 30h1v1h-1zM26 30h1v1h-1zM28 30h1v1h-1zM30 30h1v1h-1zM32 30h1v1h-1zM35 30h1v1h-1zM36 30h1v1h-1zM0 31h1v1h-1zM6 31h1v1h-1zM8 31h1v1h-1zM9 31h1v1h-1zM10 31h1v1h-1zM15 31h1v1h-1zM16 31h1v1h-1zM17 31h1v1h-1zM18 31h1v1h-1zM20 31h1v1h-1zM22 31h1v1h-1zM25 31h1v1h-1zM27 31h1v1h-1zM28 31h1v1h-1zM32 31h1v1h-1zM36 31h1v1h-1zM0 32h1v1h-1zM2 32h1v1h-1zM3 32h1v1h-1zM4 32h1v1h-1zM6 32h1v1h-1zM8 32h1v1h-1zM11 32h1v1h-1zM12 32h1v1h-1zM13 32h1v1h-1zM15 32h1v1h-1zM19 32h1v1h-1zM21 32h1v1h-1zM22 32h1v1h-1zM27 32h1v1h-1zM28 32h1v1h-1zM29 32h1v1h-1zM30 32h1v1h-1zM31 32h1v1h-1zM32 32h1v1h-1zM36 32h1v1h-1zM0 33h1v1h-1zM2 33h1v1h-1zM3 33h1v1h-1zM4 33h1v1h-1zM6 33h1v1h-1zM8 33h1v1h-1zM9 33h1v1h-1zM10 33h1v1h-1zM12 33h1v1h-1zM13 33h1v1h-1zM16 33h1v1h-1zM18 33h1v1h-1zM23 33h1v1h-1zM24 33h1v1h-1zM25 33h1v1h-1zM27 33h1v1h-1zM28 33h1v1h-1zM29 33h1v1h-1zM30 33h1v1h-1zM33 33h1v1h-1zM34 33h1v1h-1zM36 33h1v1h-1zM0 34h1v1h-1zM2 34h1v1h-1zM3 34h1v1h-1zM4 34h1v1h-1zM6 34h1v1h-1zM10 34h1v1h-1zM12 34h1v1h-1zM13 34h1v1h-1zM15 34h1v1h-1zM16 34h1v1h-1zM17 34h1v1h-1zM18 34h1v1h-1zM19 34h1v1h-1zM20 34h1v1h-1zM21 34h1v1h-1zM23 34h1v1h-1zM25 34h1v1h-1zM32 34h1v1h-1zM33 34h1v1h-1zM36 34h1v1h-1zM0 35h1v1h-1zM6 35h1v1h-1zM12 35h1v1h-1zM13 35h1v1h-1zM16 35h1v1h-1zM17 35h1v1h-1zM18 35h1v1h-1zM19 35h1v1h-1zM20 35h1v1h-1zM23 35h1v1h-1zM26 35h1v1h-1zM30 35h1v1h-1zM32 35h1v1h-1zM33 35h1v1h-1zM34 35h1v1h-1zM35 35h1v1h-1zM36 35h1v1h-1zM0 36h1v1h-1zM1 36h1v1h-1zM2 36h1v1h-1zM3 36h1v1h-1zM4 36h1v1h-1zM5 36h1v1h-1zM6 36h1v1h-1zM8 36h1v1h-1zM10 36h1v1h-1zM11 36h1v1h-1zM13 36h1v1h-1zM14 36h1v1h-1zM15 36h1v1h-1zM18 36h1v1h-1zM20 36h1v1h-1zM23 36h1v1h-1zM24 36h1v1h-1zM28 36h1v1h-1zM29 36h1v1h-1zM30 36h1v1h-1zM31 36h1v1h-1zM33 36h1v1h-1zM36 36h1v1h-1z" fill="#0A693C"/></svg></div>
+      <div class="field"><label>Board link</label>
+        <input type="text" id="shareUrl" readonly value="https://claude.ai/code/artifact/02110067-05dd-44d8-a74f-f02f8c525367"></div>
+      <p class="hint" style="margin-top:-6px">Make sure the artifact is shared (Share menu on the page) so teammates can open it.</p>
+      <div class="modal-f"><div class="right">
+        <button class="btn" id="copyLink">Copy link</button>
+        <button class="btn solid" id="printQr">Print QR</button>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="managerScrim">
+  <div class="modal" style="width:min(440px,100%)" role="dialog" aria-modal="true" aria-labelledby="mgrModalTitle">
+    <div class="modal-h">
+      <div><h2 id="mgrModalTitle">Add a manager</h2><p id="mgrModalMsg"></p></div>
+      <button class="btn btn-icon ghost" data-close aria-label="Close">✕</button>
+    </div>
+    <div class="modal-b">
+      <div class="field" id="mgrNameField"><label for="mgrNameInput">Name</label>
+        <input type="text" id="mgrNameInput" placeholder="First name" autocomplete="off"></div>
+      <div class="field"><label for="mgrPinInput">PIN</label>
+        <input type="password" id="mgrPinInput" inputmode="numeric" autocomplete="off" placeholder="••••">
+        <span class="hint">At least 4 characters — each manager picks their own.</span></div>
+      <div class="modal-f">
+        <button class="btn ghost" id="mgrNotNow">Not now</button>
+        <div class="right">
+          <button class="btn ghost" data-close>Cancel</button>
+          <button class="btn solid" id="mgrModalSave">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="pinScrim">
+  <div class="modal" style="width:min(420px,100%)" role="dialog" aria-modal="true" aria-labelledby="pinTitle">
+    <div class="modal-h"><div><h2 id="pinTitle">Manager access</h2><p id="pinMsg"></p></div>
+      <button class="btn btn-icon ghost" data-close aria-label="Close">✕</button></div>
+    <div class="modal-b">
+      <div class="field">
+        <label for="pinInput">Manager PIN</label>
+        <input type="password" id="pinInput" inputmode="numeric" autocomplete="off" placeholder="••••">
+        <span class="hint" id="pinHint"></span>
+      </div>
+      <div class="modal-f">
+        <button class="btn ghost" id="pinSkip">Skip for now</button>
+        <div class="right">
+          <button class="btn ghost" data-close>Cancel</button>
+          <button class="btn solid" id="pinGo">Unlock</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="confirmScrim">
+  <div class="modal" style="width:min(440px,100%)" role="alertdialog" aria-modal="true" aria-labelledby="cfTitle">
+    <div class="modal-h"><div><h2 id="cfTitle">Are you sure?</h2><p id="cfMsg"></p></div></div>
+    <div class="modal-b">
+      <div class="modal-f"><div class="right">
+        <button class="btn ghost" id="cfCancel">Cancel</button>
+        <button class="btn solid" id="cfOk">Confirm</button>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+  const KEY = "mammoth_leaderboard_v1";
+  const CLOUD = { on:true, booted:false, rev:0, pin:null, pending:false, offline:false, timer:null };
+  const API_BOARD = "/api/board", API_NOM = "/api/nominate";
+
+  /* ---------- tier + callout config ---------- */
+  const TIERS = [
+    { id:"teebox",    name:"Tee Box",   v:"--t-teebox",    blurb:"On the tee. Come up swinging." },
+    { id:"rookie",    name:"Rookie",    v:"--t-rookie",    blurb:"Step up to the tee box.",
+      req:{ total:3 }, next:"3 callouts" },
+    { id:"starter",   name:"Starter",   v:"--t-starter",   blurb:"On the fairway.",
+      req:{ total:15, peer:2 }, next:"15 callouts · 2 teammate" },
+    { id:"allstar",   name:"All-Star",  v:"--t-allstar",   blurb:"On the back nine.",
+      req:{ total:35, peer:5, athlete:1 }, next:"35 · 5 teammate · 1 athlete" },
+    { id:"mvp",       name:"MVP",       v:"--t-mvp",       blurb:"Approaching the green.",
+      req:{ total:60, peer:8, athlete:2 }, next:"60 · 8 teammate · 2 athlete" },
+    { id:"playmaker", name:"Playmaker", v:"--t-playmaker", blurb:"Scratch. Zero handicap.",
+      req:{ total:100, peer:15, athlete:3, mentor:true }, next:"100 · 15 teammate · 3 athlete · mentor" },
+    { id:"legend",    name:"Legend",    v:"--t-legend",    blurb:"Course record.",
+      req:{ total:150, front:true }, next:"150 · nominated by all" },
+  ];
+  const TIER_BY_ID = Object.fromEntries(TIERS.map(t=>[t.id,t]));
+  const TIER_INDEX = Object.fromEntries(TIERS.map((t,i)=>[t.id,i]));
+
+  /* earn + reward copy for the read-only How It Works tab (from the program doc) */
+  const HOW = {
+    rookie:    { earn:"3 callouts in 60 consecutive days.", reward:"$10 local gift card or Clubhouse food credit. Your name goes on the Leaderboard." },
+    starter:   { earn:"15 total callouts. At least 2 teammate-nominated.", reward:"$25 local gift card or food credit. Starter badge on the board." },
+    allstar:   { earn:"35 total. 5 teammate-nominated. 1 athlete-generated.", reward:"$50 food & bar credit. Private Flight Deck bay or a round of Pure Putt for two. Photo on the All-Star wall. 30-day scheduling priority." },
+    mvp:       { earn:"60 total. 8 teammate-nominated. 2 athlete-generated.", reward:"Your pick from the exclusive Clubhouse gear collection. Floor lead status on peak shifts." },
+    playmaker: { earn:"100 total. 15 teammate-nominated. 3 athlete-generated. Mentored a Rookie.", reward:"Personalized Clubhouse gear with your name on it. One paid day off. A monthly Playmaker shift. Quarter scheduling priority." },
+    legend:    { earn:"150 total. Sustained across all callout types. Nominated by peers, coaches, and the front office.", reward:"The full Legend drop: premium personalized gear with your name and legacy. Two paid days off. Permanent Legend wall. Legacy Award at all-hands." },
+  };
+
+  const CALLOUTS = [
+    ["The Assist","Stepped in to help without being asked."],
+    ["Clutch Play","Came through in a high-pressure moment."],
+    ["Game Changer","Turned a guest experience around into a win."],
+    ["Full Court Press","Went above and beyond the whole shift."],
+    ["Unreasonable","Hospitality a guest will never forget."],
+    ["Hat Trick","Three separate guest compliments in one shift."],
+    ["The Rookie Move","A new teammate showed they get it early."],
+    ["The Recovery","Owned a mistake and fixed it, unprompted."],
+    ["The Playmaker Call","A Playmaker lifted the whole team."],
+    ["The Spark","Set the energy for the entire room."],
+    ["The Scout","Spotted a problem before it became one."],
+    ["The Coach","Helped a newer teammate grow, unasked."],
+  ];
+  const SRC_LABEL = { coach:"Coach", peer:"Teammate", athlete:"Athlete" };
+
+  /* ---------- date helpers ---------- */
+  const DAY = 86400000;
+  const now = () => Date.now();
+  function weekStart(ts){ const d = new Date(ts); d.setHours(0,0,0,0); const dow=(d.getDay()+6)%7; return d.getTime()-dow*DAY; } // Monday
+  const thisWeek = () => weekStart(now());
+  function fmtDate(ts){ return new Date(ts).toLocaleDateString(undefined,{month:"short",day:"numeric"}); }
+  function fmtDateTime(ts){ return new Date(ts).toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}); }
+  function ago(ts){ const d=Math.floor((now()-ts)/DAY); if(d<=0)return "today"; if(d===1)return "yesterday"; if(d<7)return d+"d ago"; if(d<30)return Math.floor(d/7)+"w ago"; return fmtDate(ts); }
+
+  /* ---------- derived stats ---------- */
+  function stats(p){
+    const total=p.callouts.length;
+    let peer=0, athlete=0, coach=0, week=0; const wk=thisWeek();
+    for(const c of p.callouts){ if(c.src==="peer")peer++; else if(c.src==="athlete")athlete++; else coach++; if(c.date>=wk)week++; }
+    return { total, peer, athlete, coach, week };
+  }
+  function meets(req, s, p){
+    if(!req) return true;
+    if(req.total && s.total < req.total) return false;
+    if(req.peer && s.peer < req.peer) return false;
+    if(req.athlete && s.athlete < req.athlete) return false;
+    if(req.mentor && !p.mentor) return false;
+    if(req.front && !p.front) return false;
+    return true;
+  }
+  function earnedTier(p){
+    const s=stats(p); let t="teebox";
+    for(const tier of TIERS){ if(tier.id==="teebox") continue; if(meets(tier.req,s,p)) t=tier.id; }
+    return t;
+  }
+  function currentTier(p){ // override wins if it's not "auto"
+    if(p.tier && p.tier!=="auto") return p.tier;
+    return earnedTier(p);
+  }
+  function nextTierInfo(p){
+    const idx = TIER_INDEX[earnedTier(p)];
+    const nxt = TIERS[idx+1];
+    if(!nxt) return null;
+    const s = stats(p);
+    const need = nxt.req?.total || 0;
+    const pct = need ? Math.min(100, Math.round(s.total/need*100)) : 100;
+    return { tier:nxt, pct, remaining:Math.max(0, need - s.total) };
+  }
+
+  /* ---------- state ---------- */
+  let DATA = load();
+  let ui = { sort:"callouts", filter:"all", q:"", editId:null, logSel:null, logSrc:"coach", photoBuf:undefined, recentRange:"7d", nomSel:null, showCodes:false };
+
+  function load(){
+    try{ const raw=localStorage.getItem(KEY); if(raw){ const d=JSON.parse(raw); if(d&&Array.isArray(d.people)) return d; } }catch(e){}
+    return seed();
+  }
+  function ensureSettings(){
+    if(!DATA.settings || typeof DATA.settings!=="object") DATA.settings={};
+    if(!Array.isArray(DATA.settings.managers)) DATA.settings.managers=[];
+    if(DATA.settings.pin){ // migrate a legacy single shared PIN into a named manager
+      if(!DATA.settings.managers.some(m=>m.pin===DATA.settings.pin))
+        DATA.settings.managers.push({ id:"m"+Math.random().toString(36).slice(2,9), name:"Manager", pin:DATA.settings.pin });
+    }
+    delete DATA.settings.pin;
+    if(!DATA.settings.ownerId && DATA.settings.managers.length) DATA.settings.ownerId=DATA.settings.managers[0].id;
+    if(!Array.isArray(DATA.nominations)) DATA.nominations=[];
+    if(!Array.isArray(DATA.activity)) DATA.activity=[];
+  }
+  ensureSettings();
+  function logActivity(text, actor){
+    if(!Array.isArray(DATA.activity)) DATA.activity=[];
+    DATA.activity.unshift({ id:"a"+Math.random().toString(36).slice(2,9), at:now(), actor:(actor||currentManager||"A manager"), text });
+    if(DATA.activity.length>400) DATA.activity.length=400;
+  }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(DATA)); }catch(e){}
+    if(CLOUD.on && CLOUD.booted) schedulePush(); }
+  function schedulePush(){ CLOUD.pending=true; setStatus("saving"); clearTimeout(CLOUD.timer); CLOUD.timer=setTimeout(pushBoard,500); }
+  async function pushBoard(){
+    if(!CLOUD.on){ CLOUD.pending=false; return; }
+    try{
+      const r=await fetch(API_BOARD,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({pin:CLOUD.pin, board:DATA})});
+      const j=await r.json();
+      if(j && j.ok){ CLOUD.rev=j.rev; CLOUD.pending=false; CLOUD.offline=false; setStatus("synced"); }
+      else { CLOUD.pending=false; setStatus("error",(j&&j.error)||"save blocked"); }
+    }catch(e){ CLOUD.offline=true; CLOUD.pending=false; setStatus("offline"); }
+  }
+  async function fetchBoard(pin){
+    const url = pin ? (API_BOARD+"?pin="+encodeURIComponent(pin)) : API_BOARD;
+    const r=await fetch(url,{cache:"no-store"}); return await r.json();
+  }
+  async function refreshFromCloud(){
+    try{ const j=await fetchBoard(CLOUD.pin);
+      if(j && j.board && (j.rev||0)>=CLOUD.rev){ DATA=j.board; ensureSettings(); CLOUD.rev=j.rev||0; render(); renderManagers(); }
+    }catch(e){}
+  }
+  function startPolling(){ setInterval(async ()=>{
+    if(!CLOUD.on || CLOUD.pending) return;
+    if(document.querySelector(".scrim.open")) return;
+    try{ const j=await fetchBoard(CLOUD.pin);
+      if(j && j.board && (j.rev||0)>CLOUD.rev){ DATA=j.board; ensureSettings(); CLOUD.rev=j.rev||0; render(); renderManagers(); }
+      CLOUD.offline=false; if(!CLOUD.pending) setStatus("synced");
+    }catch(e){ CLOUD.offline=true; setStatus("offline"); }
+  }, 7000); }
+  async function boot(){
+    try{
+      const j=await fetchBoard(null);
+      if(j && j.board){ DATA=j.board; CLOUD.rev=j.rev||0; ensureSettings(); }
+      else { DATA=seed(); ensureSettings(); await pushBoard(); }
+      CLOUD.offline=false; setStatus("synced");
+    }catch(e){ CLOUD.on=false; CLOUD.offline=true; setStatus("offline"); }
+    CLOUD.booted=true; render(); renderManagers(); startPolling();
+  }
+  function setStatus(kind,msg){
+    const el=document.getElementById("syncStatus"); if(!el) return;
+    const map={ synced:["\u25CF Live","ok"], saving:["\u25CF Saving\u2026","busy"], offline:["\u25CF Offline \u2014 this device only","warn"], error:["\u25CF "+(msg||"Error"),"warn"] };
+    const v=map[kind]||map.synced; el.textContent=v[0]; el.className="sync "+v[1];
+  }
+
+  function uid(){ return "p"+Math.random().toString(36).slice(2,9); }
+  function cid(){ return "c"+Math.random().toString(36).slice(2,9); }
+
+  /* ---------- sample roster ---------- */
+  function seed(){
+    const t = now();
+    const roster = [
+      "Abigail Singer","Aidan Boudreaux","Alison McCloud","Antonio Mosqueda","Ashley Abasolo",
+      "Audreena Javonovich","Avery Simpson","Branden Lummus","Brennen McAllister","Carley Durbin",
+      "Cerisse Smith","Christine Pletcher","Daisy White","Elizabeth Tanner","Gabriela Castillo",
+      "Gavin Klassen","Ivy Taff","Jamell Jackson","Jayden Cudmore","Jessica Duckett",
+      "Joey Reynolds","Josue Chamagua","Kaeli Villa","Karley Goracke","Kris Anderson",
+      "Lexia Sanchez","Logan Overbey","Lyndsey Davis-Stuart","Lyric Williams","Marcos Jimenez",
+      "Mary Rincones","Nieves Antonio Cruz","Niyahna Scales","Oscar Gonzalez","Ramiro Vazquez",
+      "Ricardo Villalpando","Saint McClure","Tia Huynh","Tristen Jackson","Victoria Thomas",
+      "Yasmine Hatfield","Zoey Garrett"
+    ];
+    const people = roster.map(n=>({ id:uid(), name:n, photo:null, tier:"auto", mentor:false, front:false, callouts:[] }));
+    return { people, updated: t, settings:{ managers:[], ownerId:null }, nominations:[], activity:[] };
+  }
+
+  /* ---------- avatar ---------- */
+  const AV_COLORS = ["#0A693C","#2E9B63","#1c8f52","#EABEEA","#D9E047","#146b3e","#3a8f63","#7fbf98"];
+  function initials(name){ return name.trim().split(/\s+/).slice(0,2).map(w=>w[0]||"").join("").toUpperCase()||"?"; }
+  function avatarHTML(p){
+    const c = getComputedStyle(document.documentElement).getPropertyValue(TIER_BY_ID[currentTier(p)].v).trim();
+    if(p.photo) return `<div class="avatar" style="--tier-c:${c}"><img src="${p.photo}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover"></div>`;
+    let h=0; for(const ch of p.name) h=(h*31+ch.charCodeAt(0))>>>0;
+    const bg=AV_COLORS[h%AV_COLORS.length];
+    return `<div class="avatar" style="--tier-c:${c};background:${bg};color:${inkOn(bg)}">${esc(initials(p.name))}</div>`;
+  }
+  function esc(s){ return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+  function hexLum(h){ h=h.replace('#','').trim(); const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16); return 0.299*r+0.587*g+0.114*b; }
+  function inkOn(h){ return hexLum(h) > 150 ? "#141414" : "#FEF9F3"; }  // dark text on light fills (e.g. Pulse Violet), light on dark
+
+  /* ---------- render ---------- */
+  function tierColor(id){ return getComputedStyle(document.documentElement).getPropertyValue(TIER_BY_ID[id].v).trim(); }
+
+  function render(){
+    renderStrip();
+    renderRoster();
+    renderTeam();
+    renderHow();
+    renderRecent();
+    renderWall();
+    renderNomQueue();
+    updateNomBadge();
+    renderLegend();
+    document.body.classList.toggle("has-people", DATA.people.length>0);
+  }
+
+  function flatCallouts(){
+    const out=[];
+    for(const p of DATA.people) for(const c of p.callouts) out.push({p, c});
+    out.sort((a,b)=>b.c.date-a.c.date);
+    return out;
+  }
+
+  function renderRecent(){
+    const host=$("#recentFeed"); if(!host) return;
+    const range=ui.recentRange||"7d";
+    const cut = range==="24h"? now()-DAY : range==="7d"? thisWeek() : 0;
+    const items=flatCallouts().filter(x=>x.c.date>=cut);
+    if(!items.length){ host.innerHTML=`<div class="empty"><h3>Nothing here yet</h3><p>${range==="all"?"Log a callout to start the feed.":"No callouts in this range — try “All”."}</p></div>`; return; }
+    host.innerHTML = items.slice(0,120).map(({p,c})=>`<div class="fitem">
+      ${avatarHTML(p)}
+      <div><div class="fline"><b>${esc(p.name)}</b> earned <span class="ftype">${esc(c.type)}</span></div>
+        ${c.note?`<div class="fnote">"${esc(c.note)}"</div>`:""}</div>
+      <div class="fmeta">${ago(c.date)}<span class="src">${SRC_LABEL[c.src]||""}</span></div>
+    </div>`).join("");
+  }
+
+  function renderWall(){
+    const host=$("#wall"); if(!host) return;
+    const order=["legend","playmaker","mvp","allstar"];
+    const groups=order.map(id=>({ id, T:TIER_BY_ID[id],
+      people:DATA.people.filter(p=>currentTier(p)===id).sort((a,b)=>stats(b).total-stats(a).total) })).filter(g=>g.people.length);
+    if(!groups.length){ host.innerHTML=`<div class="empty"><h3>The wall is waiting</h3><p>Reach All-Star to earn your place here.</p></div>`; return; }
+    host.innerHTML = groups.map(g=>{
+      const c=tierColor(g.id);
+      return `<div class="wall-tier"><div class="wt-label" style="color:${c}"><i style="background:${c}"></i>${g.T.name}${g.people.length>1?"s":""}</div>
+        <div class="wall-grid">${g.people.map(p=>`<div class="honor" style="--tier-c:${c}">${avatarHTML(p)}
+          <div class="hn">${esc(p.name)}</div><div class="htier" style="color:${c}">${g.T.name}</div><div class="hc">${stats(p).total} callouts</div></div>`).join("")}</div></div>`;
+    }).join("");
+  }
+
+  function renderNomQueue(){
+    const wrap=$("#nomQueueWrap"), list=$("#nomList"); if(!wrap||!list) return;
+    const noms=(DATA.nominations||[]).slice().sort((a,b)=>a.date-b.date);
+    wrap.hidden = noms.length===0;
+    $("#nomCount").textContent = noms.length;
+    list.innerHTML = noms.map(n=>{
+      const p=DATA.people.find(x=>x.id===n.personId);
+      const who=p?p.name:"(removed teammate)";
+      return `<div class="nom-item" data-id="${n.id}">
+        <div><div class="ni-t"><b>${esc(who)}</b> · ${esc(n.type)}</div>
+          ${n.note?`<div class="ni-note">"${esc(n.note)}"</div>`:""}
+          <div class="ni-by">From ${n.by?esc(n.by):"anonymous"} · ${ago(n.date)}</div></div>
+        <div class="ni-act">
+          <button class="btn solid" data-nom="approve" data-id="${n.id}">Approve</button>
+          <button class="btn ghost" data-nom="decline" data-id="${n.id}">Decline</button>
+        </div></div>`;
+    }).join("");
+  }
+
+  function updateNomBadge(){
+    const n=(DATA.nominations||[]).length;
+    document.body.classList.toggle("has-noms", n>0);
+    if($("#nomBadgeTab")) $("#nomBadgeTab").textContent=n;
+    if($("#nomBadgeMgr")) $("#nomBadgeMgr").textContent=n;
+  }
+
+  function renderHow(){
+    const tiers = TIERS.filter(t=>t.id!=="teebox");
+    $("#howTiers").innerHTML = tiers.map(t=>{
+      const c=tierColor(t.id), h=HOW[t.id]||{};
+      return `<div class="tier-card" style="--tier-c:${c};--tc-ink:${inkOn(c)}">
+        <div><div class="tc-name"><span>${t.name}</span></div><div class="tc-blurb">${esc(t.blurb||"")}</div></div>
+        <div class="tc-earn"><span class="lbl">How you earn it</span>${esc(h.earn||"")}</div>
+        <div class="tc-reward"><span class="lbl">Your reward</span>${esc(h.reward||"")}</div>
+      </div>`;
+    }).join("");
+    $("#howCallouts").innerHTML = CALLOUTS.map(c=>`<div class="gloss"><div class="g-t">${esc(c[0])}</div><div class="g-d">${esc(c[1])}</div></div>`).join("");
+  }
+
+  function renderTeam(){
+    const host=$("#teamList");
+    const n=DATA.people.length;
+    $("#teamCount").textContent = n ? `${n} teammate${n!==1?"s":""} on the roster — add, edit, or remove anyone here.` : "No teammates yet.";
+    if(!n){ host.innerHTML = `<div class="empty"><h3>The roster is empty</h3><p>Click “Add teammate” to put your first name on the board.</p></div>`; return; }
+    const list = DATA.people.slice().sort((a,b)=>a.name.localeCompare(b.name));
+    host.innerHTML = list.map(p=>{
+      const s=stats(p), tier=currentTier(p), T=TIER_BY_ID[tier], c=tierColor(tier);
+      return `<div class="trow" style="--tier-c:${c}" data-id="${p.id}">
+        ${avatarHTML(p)}
+        <div>
+          <div class="tname">${esc(p.name)} <span class="tierbadge" style="background:${c};color:${inkOn(c)};border-color:${c}">${T.name}</span></div>
+          <div class="tmeta"><span><b>${s.total}</b> callouts</span><span><b>${s.peer}</b> teammate</span><span><b>${s.athlete}</b> athlete</span>${s.week>0?`<span style="color:var(--accent);font-weight:750">▲ ${s.week} this week</span>`:""}</div>
+        </div>
+        <div class="tactions">
+          <button class="btn solid" data-tact="log" data-id="${p.id}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M12 2l2.9 6.3L22 9.2l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-.9z"/></svg> Log callout
+          </button>
+          <button class="btn" data-tact="edit" data-id="${p.id}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg> Edit
+          </button>
+          <button class="btn danger" data-tact="del" data-id="${p.id}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg> Delete
+          </button>
+        </div>
+      </div>`;
+    }).join("");
+  }
+
+  function renderStrip(){
+    const wk=thisWeek();
+    const withStats = DATA.people.map(p=>({p, s:stats(p), tier:currentTier(p)}));
+    // weekly leader
+    const wl = withStats.filter(x=>x.s.week>0).sort((a,b)=>b.s.week-a.s.week)[0];
+    // total callouts this week (whole team)
+    const teamWeek = withStats.reduce((n,x)=>n+x.s.week,0);
+    // top current tier holder (last Legend/Playmaker)
+    const topTierHolder = withStats.slice().sort((a,b)=> (TIER_INDEX[b.tier]-TIER_INDEX[a.tier]) || (b.s.total-a.s.total))[0];
+    const totalLogged = withStats.reduce((n,x)=>n+x.s.total,0);
+
+    const strip = $("#strip");
+    const tiles = [];
+    tiles.push(`<div class="tile lead">
+      <div class="cap">🔥 This week's leader</div>
+      <div class="tile-row">${ wl ? avatarHTML(wl.p) : placeholderAv() }
+        <div><div class="who">${ wl? esc(wl.p.name):"—"}</div>
+        <div class="meta">${ wl? `${wl.s.week} callout${wl.s.week!==1?"s":""} since Monday`:"No callouts logged yet this week"}</div></div>
+      </div></div>`);
+    tiles.push(`<div class="tile">
+      <div class="cap">🏅 Top of the roster</div>
+      <div class="tile-row">${ topTierHolder? avatarHTML(topTierHolder.p):placeholderAv() }
+        <div><div class="who">${ topTierHolder? esc(topTierHolder.p.name):"—"}</div>
+        <div class="meta">${ topTierHolder? `<span style="color:${tierColor(topTierHolder.tier)};font-weight:800">${TIER_BY_ID[topTierHolder.tier].name}</span> · ${topTierHolder.s.total} callouts`:"Add your roster to begin"}</div></div>
+      </div></div>`);
+    tiles.push(`<div class="tile">
+      <div class="cap">📣 Callouts this week</div>
+      <div class="tile-row"><div class="big">${teamWeek}<br><small>team total · ${totalLogged} all-time</small></div></div></div>`);
+    // closest to leveling up — smallest remaining to next tier (min 1 callout on the board so it's earned momentum)
+    const climbing = withStats
+      .map(x=>({ x, nt:nextTierInfo(x.p) }))
+      .filter(o=> o.nt && o.nt.remaining>0 && o.x.s.total>0)
+      .sort((a,b)=> a.nt.remaining-b.nt.remaining || b.x.s.total-a.x.s.total)[0];
+    tiles.push(`<div class="tile">
+      <div class="cap">⛳ Closest to leveling up</div>
+      ${ climbing ? `<div class="tile-row">${avatarHTML(climbing.x.p)}
+        <div><div class="who">${esc(climbing.x.p.name)}</div>
+        <div class="meta"><b style="color:var(--ink)">${climbing.nt.remaining}</b> callout${climbing.nt.remaining!==1?"s":""} from <span style="color:${tierColor(climbing.nt.tier.id)};font-weight:800">${climbing.nt.tier.name}</span></div></div>
+      </div>` : `<div class="tile-row">${placeholderAv()}<div><div class="who">—</div><div class="meta">Log a callout to start the climb</div></div></div>` }
+    </div>`);
+    strip.innerHTML = tiles.join("");
+  }
+  function placeholderAv(){ return `<div class="avatar" style="--tier-c:var(--line);background:var(--panel-2);color:var(--ink-faint);font-size:22px">·</div>`; }
+
+  function renderRoster(){
+    const host=$("#roster");
+    let list = DATA.people.map(p=>({p, s:stats(p), tier:currentTier(p)}));
+    if(ui.filter!=="all") list=list.filter(x=>x.tier===ui.filter);
+    if(ui.q){ const q=ui.q.toLowerCase(); list=list.filter(x=>x.p.name.toLowerCase().includes(q)); }
+    if(ui.sort==="name") list.sort((a,b)=>a.p.name.localeCompare(b.p.name));
+    else if(ui.sort==="week") list.sort((a,b)=> b.s.week-a.s.week || b.s.total-a.s.total);
+    else list.sort((a,b)=> b.s.total-a.s.total || b.s.week-a.s.week);
+
+    if(!list.length){
+      host.innerHTML = `<div class="empty"><h3>${DATA.people.length? "No teammates match":"The roster is empty"}</h3>
+        <p>${DATA.people.length? "Try a different filter or search.":"Turn on Manager and add your first teammate. Everyone starts at the tee box."}</p></div>`;
+      return;
+    }
+    host.innerHTML = list.map((x,i)=>{
+      const {p,s,tier}=x; const T=TIER_BY_ID[tier]; const c=tierColor(tier);
+      const rank=i+1;
+      const last=p.callouts[p.callouts.length-1];
+      const nt=nextTierInfo(p);
+      const medal = rank<=3 ? `<span class="medal">${["1st","2nd","3rd"][rank-1]}</span>` : "";
+      return `<article class="row ${rank<=3?'top'+rank:''}" style="--tier-c:${c}" data-id="${p.id}">
+        <div class="rank">${rank}${medal}</div>
+        ${avatarHTML(p)}
+        <div class="person">
+          <div class="name">${esc(p.name)} <span class="tierbadge" style="background:${c};color:${inkOn(c)};border-color:${c}">${T.name}</span></div>
+          ${ last ? `<div class="lastcall"><span class="calltag">${esc(last.type)}</span>
+              ${ last.note? `<span class="note">"${esc(last.note)}"</span>`:""}
+              <span class="src">${SRC_LABEL[last.src]||""} · ${ago(last.date)}</span></div>`
+            : `<div class="lastcall"><span class="note">No callouts yet — catch them doing something right.</span></div>` }
+          ${ nt ? `<div class="progress" title="${s.total}/${nt.tier.req?.total||''} toward ${nt.tier.name}"><i style="width:${nt.pct}%;background:${tierColor(nt.tier.id)}"></i></div>
+            <div class="nexttier">${ nt.remaining>0 ? `<b>${nt.remaining}</b> more toward <b>${nt.tier.name}</b>` : `Ready for <b>${nt.tier.name}</b> — confirm the requirements`}</div>` : `<div class="nexttier">🏆 Legend — the course record.</div>` }
+        </div>
+        <div class="score">
+          <div class="count">
+            <div class="n">${s.total}</div><div class="l">Callouts</div>
+            ${ s.week>0 ? `<div class="wk">▲ ${s.week} this week</div>`:"" }
+          </div>
+          <div class="rowbtns">
+            <button class="btn btn-icon ghost" data-act="add" data-id="${p.id}" title="Log a callout for ${esc(p.name)}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M12 2l2.9 6.3L22 9.2l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-.9z"/></svg>
+            </button>
+            <button class="btn btn-icon ghost" data-act="hist" data-id="${p.id}" title="History">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 106 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
+            </button>
+            <button class="btn btn-icon ghost" data-act="edit" data-id="${p.id}" title="Edit">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
+            </button>
+          </div>
+        </div>
+      </article>`;
+    }).join("");
+  }
+
+  function renderLegend(){
+    $("#legend").innerHTML = TIERS.slice(1).map(t=>`<span><i style="background:${tierColor(t.id)}"></i>${t.name}</span>`).join("");
+  }
+
+  /* ---------- filters / sort ---------- */
+  function buildTierFilter(){
+    const host=$("#tierFilter");
+    const opts=[["all","All"], ...TIERS.slice(1).reverse().map(t=>[t.id,t.name])];
+    host.innerHTML=opts.map(([id,label])=>`<button class="chip-f" data-tier="${id}" aria-pressed="${id==='all'}">
+      ${id!=='all'?`<span class="swatch" style="background:${tierColor(id)}"></span>`:""}${label}</button>`).join("");
+    host.onclick=e=>{ const b=e.target.closest("[data-tier]"); if(!b)return;
+      ui.filter=b.dataset.tier; $$("#tierFilter .chip-f").forEach(c=>c.setAttribute("aria-pressed", c===b)); renderRoster(); };
+  }
+  $$(".seg [data-sort]").forEach(b=>b.onclick=()=>{ ui.sort=b.dataset.sort;
+    $$(".seg [data-sort]").forEach(x=>x.setAttribute("aria-pressed", x===b)); renderRoster(); });
+  $("#search").oninput=e=>{ ui.q=e.target.value.trim(); renderRoster(); };
+
+  /* ---------- modal plumbing ---------- */
+  function openModal(id){ $("#"+id).classList.add("open"); }
+  function closeModal(el){ el.classList.remove("open"); }
+  $$(".scrim").forEach(sc=>{ sc.addEventListener("click",e=>{ if(e.target===sc) closeModal(sc); });
+    $$("[data-close]",sc).forEach(b=>b.onclick=()=>closeModal(sc)); });
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape") $$(".scrim.open").forEach(closeModal); });
+
+  /* custom confirm — window.confirm() is blocked inside the artifact iframe, so roll our own */
+  let confirmResolve=null;
+  function askConfirm(message, { title="Are you sure?", okLabel="Confirm", danger=false } = {}){
+    return new Promise(resolve=>{
+      confirmResolve=resolve;
+      $("#cfTitle").textContent=title;
+      $("#cfMsg").textContent=message;
+      const ok=$("#cfOk"); ok.textContent=okLabel;
+      ok.classList.toggle("danger", !!danger);
+      openModal("confirmScrim");
+      setTimeout(()=>ok.focus(),40);
+    });
+  }
+  function settleConfirm(val){
+    closeModal($("#confirmScrim"));
+    const r=confirmResolve; confirmResolve=null;
+    if(r) r(val);
+  }
+  $("#cfOk").onclick=()=>settleConfirm(true);
+  $("#cfCancel").onclick=()=>settleConfirm(false);
+  $("#confirmScrim").addEventListener("click",e=>{ if(e.target===$("#confirmScrim")) settleConfirm(false); });
+
+  /* ---------- teammate add/edit ---------- */
+  function fillTierSelect(){
+    $("#tmTier").innerHTML = `<option value="auto">Auto (from callouts)</option>` +
+      TIERS.map(t=>`<option value="${t.id}">${t.name}</option>`).join("");
+  }
+  function openTeammate(p){
+    ui.editId = p? p.id : null;
+    ui.photoBuf = p? p.photo : null;
+    $("#tmTitle").textContent = p? "Edit teammate" : "Add a teammate";
+    $("#tmName").value = p? p.name : "";
+    $("#tmTier").value = p? (p.tier||"auto") : "auto";
+    $("#tmMentor").checked = p? !!p.mentor : false;
+    $("#tmFront").checked = p? !!p.front : false;
+    $("#tmDelete").style.display = p? "inline-flex" : "none";
+    renderPhotoPrev();
+    openModal("teammateScrim");
+    setTimeout(()=>$("#tmName").focus(),40);
+  }
+  function renderPhotoPrev(){
+    const el=$("#photoPrev");
+    if(ui.photoBuf){ el.innerHTML=`<img src="${ui.photoBuf}" alt="preview">`; $("#photoClear").style.display="inline-flex"; }
+    else { el.innerHTML="Add<br>photo"; $("#photoClear").style.display="none"; }
+  }
+  $("#photoBtn").onclick=()=>$("#photoInput").click();
+  $("#photoClear").onclick=()=>{ ui.photoBuf=null; renderPhotoPrev(); };
+  $("#photoInput").onchange=e=>{
+    const f=e.target.files[0]; if(!f) return;
+    const img=new Image();
+    const rd=new FileReader();
+    rd.onload=()=>{ img.onload=()=>{
+      const S=320, cv=document.createElement("canvas"); cv.width=S; cv.height=S;
+      const ctx=cv.getContext("2d");
+      const scale=Math.max(S/img.width, S/img.height);
+      const w=img.width*scale, h=img.height*scale;
+      ctx.drawImage(img,(S-w)/2,(S-h)/2,w,h);
+      ui.photoBuf=cv.toDataURL("image/jpeg",0.82); renderPhotoPrev();
+    }; img.src=rd.result; };
+    rd.readAsDataURL(f);
+    e.target.value="";
+  };
+  $("#tmSave").onclick=()=>{
+    const name=$("#tmName").value.trim();
+    if(!name){ toast("Give your teammate a name"); $("#tmName").focus(); return; }
+    if(ui.editId){
+      const p=DATA.people.find(x=>x.id===ui.editId); if(!p) return;
+      p.name=name; p.tier=$("#tmTier").value; p.mentor=$("#tmMentor").checked; p.front=$("#tmFront").checked; p.photo=ui.photoBuf||null;
+      logActivity(`edited ${name}'s profile`);
+    } else {
+      DATA.people.push({ id:uid(), name, photo:ui.photoBuf||null, tier:$("#tmTier").value,
+        mentor:$("#tmMentor").checked, front:$("#tmFront").checked, callouts:[] });
+      logActivity(`added ${name} to the roster`);
+    }
+    DATA.updated=now(); save(); render(); closeModal($("#teammateScrim"));
+    toast(ui.editId? "Teammate updated":"On the roster — welcome to the tee box");
+  };
+  async function deletePerson(id, { fromModal=false } = {}){
+    const p=DATA.people.find(x=>x.id===id); if(!p) return;
+    const ok=await askConfirm(`Remove ${p.name} from the Leaderboard? Their callouts go with them. This can't be undone.`,
+      { title:"Delete teammate", okLabel:"Delete", danger:true });
+    if(!ok) return;
+    DATA.people=DATA.people.filter(x=>x.id!==id); logActivity(`removed ${p.name} from the roster`); DATA.updated=now(); save(); render();
+    if(fromModal) closeModal($("#teammateScrim"));
+    toast(`${p.name.split(" ")[0]} removed from the roster`);
+  }
+  $("#tmDelete").onclick=()=>{ if(ui.editId) deletePerson(ui.editId, { fromModal:true }); };
+  $("#addBtn").onclick=()=>openTeammate(null);
+  $("#addBtn2").onclick=()=>openTeammate(null);
+  $("#backupBtn2").onclick=()=>openModal("backupScrim");
+
+  /* team tab row actions */
+  $("#teamList").addEventListener("click",e=>{
+    const b=e.target.closest("[data-tact]"); if(!b) return;
+    const p=DATA.people.find(x=>x.id===b.dataset.id); if(!p) return;
+    if(b.dataset.tact==="edit") openTeammate(p);
+    else if(b.dataset.tact==="del") deletePerson(p.id);
+    else if(b.dataset.tact==="log") openLog(p.id);
+  });
+
+  /* ---------- tabs ---------- */
+  function switchView(v){
+    if(v==="team" && !document.body.classList.contains("mgr")) v="board";   // roster management is manager-only
+    if(v==="codes" && !document.body.classList.contains("owner")) v="board"; // manager codes are owner-only
+    $("#view-board").hidden = v!=="board";
+    $("#view-recent").hidden = v!=="recent";
+    $("#view-wall").hidden = v!=="wall";
+    $("#view-team").hidden = v!=="team";
+    $("#view-codes").hidden = v!=="codes";
+    $("#view-how").hidden = v!=="how";
+    $$(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.view===v));
+  }
+  $$(".tab").forEach(t=>t.onclick=()=>switchView(t.dataset.view));
+
+  /* ---------- recent feed range + pre-shift huddle ---------- */
+  $("#recentRange").addEventListener("click",e=>{ const b=e.target.closest("[data-range]"); if(!b) return;
+    ui.recentRange=b.dataset.range; $$("#recentRange [data-range]").forEach(x=>x.setAttribute("aria-pressed", x===b)); renderRecent(); });
+
+  function hudCard({p,c}){
+    return `<div class="hud"><div class="hud-line"><span class="nm">${esc(p.name)}</span> — <span class="ty">${esc(c.type)}</span>.${c.note?` ${esc(c.note)}`:""}</div>
+      <div class="hud-cheer">Say it out loud · lead the cheer</div></div>`;
+  }
+  function openHuddle(){
+    const items=flatCallouts().filter(x=>x.c.date>=now()-DAY);
+    const body=$("#huddleBody");
+    $("#huddleSub").textContent = items.length? `${items.length} callout${items.length!==1?"s":""} from the last 24 hours — name each one, then lead the cheer.` : "Nothing from the last 24 hours.";
+    if(!items.length){
+      const recent=flatCallouts().slice(0,3);
+      body.innerHTML = recent.length
+        ? `<div class="huddle-empty">No callouts in the last 24 hours — here are the three most recent to carry the energy.</div>`+recent.map(hudCard).join("")
+        : `<div class="huddle-empty">No callouts logged yet. Watch the floor tonight and call the first one.</div>`;
+    } else { body.innerHTML = items.map(hudCard).join(""); }
+    openModal("huddleScrim");
+  }
+  $("#huddleBtn").onclick=openHuddle;
+
+  /* ---------- peer nominations ---------- */
+  function buildNomGrid(){
+    $("#nomGrid").innerHTML = CALLOUTS.map((c,i)=>`<button class="co" data-i="${i}" aria-pressed="false"><div class="t">${esc(c[0])}</div><div class="d">${esc(c[1])}</div></button>`).join("");
+    $("#nomGrid").onclick=e=>{ const b=e.target.closest(".co"); if(!b)return; ui.nomSel=+b.dataset.i; $$("#nomGrid .co").forEach(x=>x.setAttribute("aria-pressed", x===b)); };
+  }
+  function openNominate(){
+    if(!DATA.people.length){ toast("No teammates on the roster yet"); return; }
+    ui.nomSel=null;
+    $$("#nomGrid .co").forEach(x=>x.setAttribute("aria-pressed",false));
+    $("#nomNote").value=""; $("#nomBy").value="";
+    $("#nomWho").innerHTML = DATA.people.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
+    openModal("nominateScrim");
+  }
+  $("#nominateBtn").onclick=openNominate;
+  $("#nomSubmit").onclick=async ()=>{
+    const pid=$("#nomWho").value; const person=DATA.people.find(x=>x.id===pid);
+    if(!person){ toast("Pick a teammate"); return; }
+    if(ui.nomSel==null){ toast("Pick a callout"); return; }
+    const by=$("#nomBy").value.trim();
+    if(!by){ toast("Add your name to send a nomination"); $("#nomBy").focus(); return; }
+    const nomination={ personId:pid, type:CALLOUTS[ui.nomSel][0], note:$("#nomNote").value.trim(), by };
+    if(CLOUD.on && !CLOUD.offline){
+      try{
+        const r=await fetch(API_NOM,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({nomination})});
+        const j=await r.json();
+        if(j && j.ok){ CLOUD.rev=j.rev; closeModal($("#nominateScrim")); toast("Nomination sent — a coach will review it. Nice cheer."); refreshFromCloud(); return; }
+        toast("Couldn't send — try again"); return;
+      }catch(e){ toast("Can't reach the board — try again"); return; }
+    }
+    if(!Array.isArray(DATA.nominations)) DATA.nominations=[];
+    DATA.nominations.push({ id:"n"+Math.random().toString(36).slice(2,9), personId:pid, type:nomination.type, note:nomination.note, by, date:now() });
+    logActivity(`nominated ${person.name} for ${nomination.type}`, by);
+    save(); render(); closeModal($("#nominateScrim")); toast("Nomination sent");
+  };
+  $("#nomList").addEventListener("click",e=>{
+    const b=e.target.closest("[data-nom]"); if(!b) return;
+    const n=(DATA.nominations||[]).find(x=>x.id===b.dataset.id); if(!n) return;
+    if(b.dataset.nom==="approve"){
+      const p=DATA.people.find(x=>x.id===n.personId);
+      if(p){
+        const before=currentTier(p);
+        p.callouts.push({ id:cid(), type:n.type, src:"peer", note:n.note||"", date:now() });
+        logActivity(`approved ${n.by||"a"} nomination — ${n.type} for ${p.name}`);
+        DATA.nominations=DATA.nominations.filter(x=>x.id!==n.id); DATA.updated=now(); save(); render();
+        const after=earnedTier(p);
+        if(TIER_INDEX[after]>TIER_INDEX[before] && (p.tier==="auto"||!p.tier)) celebrate(`${p.name} just hit ${TIER_BY_ID[after].name}! Say it at pre-shift. 🎉`);
+        else toast(`Approved — ${n.type} logged for ${p.name.split(" ")[0]}`);
+      } else { DATA.nominations=DATA.nominations.filter(x=>x.id!==n.id); save(); render(); toast("That teammate is off the roster — nomination cleared"); }
+    } else {
+      const p2=DATA.people.find(x=>x.id===n.personId);
+      DATA.nominations=DATA.nominations.filter(x=>x.id!==n.id); logActivity(`declined a nomination${p2?` for ${p2.name}`:""}`); save(); render(); toast("Nomination declined");
+    }
+  });
+
+  /* ---------- print ---------- */
+  $("#printBtn").onclick=()=>{ try{ window.print(); }catch(e){ toast("Use your browser's Print — Cmd/Ctrl + P"); } };
+
+  /* ---------- share / QR ---------- */
+  $("#shareBtn").onclick=()=>openModal("shareScrim");
+  $("#copyLink").onclick=async ()=>{
+    const url=$("#shareUrl").value;
+    try{ await navigator.clipboard.writeText(url); toast("Link copied"); }
+    catch(e){ $("#shareUrl").select(); toast("Press Cmd/Ctrl + C to copy"); }
+  };
+  $("#printQr").onclick=()=>{
+    const w=window.open("","_blank");
+    if(!w){ toast("Allow pop-ups, then try Print QR again"); return; }
+    w.document.write(`<title>Clubhouse Leaderboard — QR</title><body style="font-family:system-ui;text-align:center;padding:40px;color:#0A693C">
+      <h1 style="letter-spacing:.04em">THE LEADERBOARD</h1><p style="color:#333">Scan to see where you stand. No sidelines. No spectators.</p>
+      <div style="width:320px;margin:20px auto">${$("#qrWrap").innerHTML}</div>
+      <p style="color:#333;font-size:14px">Mammoth Clubhouse · Wichita</p></body>`);
+    w.document.close(); setTimeout(()=>{ try{ w.print(); }catch(e){} }, 300);
+  };
+
+  /* ---------- log callout ---------- */
+  function buildCalloutGrid(){
+    $("#calloutGrid").innerHTML = CALLOUTS.map((c,i)=>`<button class="co" data-i="${i}" aria-pressed="false">
+      <div class="t">${esc(c[0])}</div><div class="d">${esc(c[1])}</div></button>`).join("");
+    $("#calloutGrid").onclick=e=>{ const b=e.target.closest(".co"); if(!b)return;
+      ui.logSel=+b.dataset.i; $$("#calloutGrid .co").forEach(x=>x.setAttribute("aria-pressed", x===b)); };
+  }
+  $("#srcSeg").onclick=e=>{ const b=e.target.closest("[data-src]"); if(!b)return;
+    ui.logSrc=b.dataset.src; $$("#srcSeg button").forEach(x=>x.setAttribute("aria-pressed", x===b)); };
+  function fillLogWho(preId){
+    $("#logWho").innerHTML = DATA.people.slice().sort((a,b)=>a.name.localeCompare(b.name))
+      .map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
+    if(preId) $("#logWho").value=preId;
+  }
+  function openLog(preId){
+    if(!DATA.people.length){ toast("Add a teammate first"); return; }
+    ui.logSel=null; ui.logSrc="coach";
+    $$("#calloutGrid .co").forEach(x=>x.setAttribute("aria-pressed",false));
+    $$("#srcSeg button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.src==="coach"));
+    $("#logNote").value="";
+    fillLogWho(preId);
+    openModal("logScrim");
+  }
+  $("#logBtn").onclick=()=>openLog(null);
+  $("#logSave").onclick=()=>{
+    const pid=$("#logWho").value; const p=DATA.people.find(x=>x.id===pid);
+    if(!p){ toast("Pick a teammate"); return; }
+    if(ui.logSel==null){ toast("Pick a callout"); return; }
+    const before=currentTier(p);
+    p.callouts.push({ id:cid(), type:CALLOUTS[ui.logSel][0], src:ui.logSrc, note:$("#logNote").value.trim(), date:now() });
+    logActivity(`logged ${CALLOUTS[ui.logSel][0]} (${SRC_LABEL[ui.logSrc]}) for ${p.name}`);
+    DATA.updated=now(); save(); render(); closeModal($("#logScrim"));
+    const after=earnedTier(p);
+    if(TIER_INDEX[after] > TIER_INDEX[before] && (p.tier==="auto"||!p.tier)){
+      celebrate(`${p.name} just hit ${TIER_BY_ID[after].name}! Say it at pre-shift. 🎉`);
+    } else {
+      toast(`${CALLOUTS[ui.logSel][0]} logged for ${p.name.split(" ")[0]} — cheer it out loud`);
+    }
+  };
+
+  /* ---------- history ---------- */
+  function openHist(p){
+    $("#histTitle").textContent = p.name;
+    const s=stats(p);
+    $("#histSub").textContent = `${s.total} callouts · ${s.peer} teammate · ${s.athlete} athlete · ${TIER_BY_ID[currentTier(p)].name}`;
+    const list=$("#histList");
+    if(!p.callouts.length){ list.innerHTML=`<p style="color:var(--ink-faint)">No callouts yet.</p>`; }
+    else list.innerHTML = p.callouts.slice().sort((a,b)=>b.date-a.date).map(c=>`<div class="hist-item">
+        <div class="ci"><div class="ct">${esc(c.type)}</div>
+          ${c.note?`<div class="cn">"${esc(c.note)}"</div>`:""}
+          <div class="cd">${SRC_LABEL[c.src]||c.src} · ${fmtDate(c.date)}</div></div>
+        <button class="btn btn-icon ghost manager-only" data-del="${c.id}" title="Remove">✕</button></div>`).join("");
+    list.onclick=e=>{ const b=e.target.closest("[data-del]"); if(!b)return;
+      const gone=p.callouts.find(c=>c.id===b.dataset.del);
+      p.callouts=p.callouts.filter(c=>c.id!==b.dataset.del);
+      if(gone) logActivity(`removed a ${gone.type} callout from ${p.name}`);
+      DATA.updated=now(); save(); render(); openHist(p); };
+    openModal("histScrim");
+  }
+
+  /* ---------- roster row actions ---------- */
+  $("#roster").addEventListener("click",e=>{
+    const b=e.target.closest("[data-act]"); if(!b) return;
+    const p=DATA.people.find(x=>x.id===b.dataset.id); if(!p) return;
+    if(b.dataset.act==="edit") openTeammate(p);
+    else if(b.dataset.act==="hist") openHist(p);
+    else if(b.dataset.act==="add"){ if(!document.body.classList.contains("mgr")) return; openLog(p.id); }
+  });
+
+  /* ---------- backup / restore / downloads ---------- */
+  $("#backupBtn").onclick=()=>openModal("backupScrim");
+  async function exportData(){
+    const payload=JSON.stringify({ app:"mammoth-leaderboard", version:1, exported:now(), data:DATA }, null, 2);
+    const fname=`clubhouse-leaderboard-${new Date().toISOString().slice(0,10)}.json`;
+    if(window.claude && window.claude.downloads){
+      try{ await window.claude.downloads.save({ filename:fname, data:payload }); toast("Backup saved"); return; }
+      catch(err){ if(err && err.code==="declined"){ return; } /* fall through */ }
+    }
+    try{
+      const blob=new Blob([payload],{type:"application/json"});
+      const url=URL.createObjectURL(blob); const a=document.createElement("a");
+      a.href=url; a.download=fname; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),1000); toast("Backup saved");
+    }catch(e){ toast("Couldn't save the backup here"); }
+  }
+  $("#doExport").onclick=exportData;
+  $("#doImport").onclick=()=>$("#importInput").click();
+  $("#importInput").onchange=e=>{
+    const f=e.target.files[0]; if(!f) return;
+    const rd=new FileReader();
+    rd.onload=async ()=>{
+      let d=null;
+      try{
+        const obj=JSON.parse(rd.result);
+        d = obj && obj.data && Array.isArray(obj.data.people) ? obj.data : (obj && Array.isArray(obj.people) ? obj : null);
+      }catch(err){}
+      if(!d){ toast("That file isn't a Leaderboard backup"); return; }
+      const ok=await askConfirm("Replace the current board with this backup? Everything on the board now will be overwritten.",
+        { title:"Restore from backup", okLabel:"Replace board", danger:true });
+      if(!ok) return;
+      DATA=d; ensureSettings(); save(); render(); renderManagers(); closeModal($("#backupScrim")); toast("Board restored from backup");
+    };
+    rd.readAsText(f); e.target.value="";
+  };
+  $("#doReset").onclick=async ()=>{
+    const ok=await askConfirm("Reload the full team roster? Everyone resets to the tee box and all logged callouts, nominations, and manager PINs are cleared.",
+      { title:"Reset to the full team roster", okLabel:"Reload roster", danger:true });
+    if(!ok) return;
+    DATA=seed(); ensureSettings(); save(); render(); renderManagers(); closeModal($("#backupScrim")); toast("Loaded the full team roster");
+  };
+
+  /* ---------- roles: owner → managers (edit) → teammates (view-only) ---------- */
+  let currentManager=null, currentManagerId=null, currentIsOwner=false;
+  function mid(){ return "m"+Math.random().toString(36).slice(2,9); }
+  function managers(){ return (DATA.settings && Array.isArray(DATA.settings.managers)) ? DATA.settings.managers : []; }
+  function isOwner(){ return !!currentIsOwner; }
+  function maskCode(pin){ return "•".repeat(Math.max(4, (pin||"").length)); }
+
+  function reflectMgr(){
+    const on=document.body.classList.contains("mgr");
+    $("#mgrBtn").classList.toggle("solid",on); $("#mgrBtn").classList.toggle("ghost",!on);
+    $("#mgrBtn").setAttribute("aria-pressed", on);
+    document.body.classList.toggle("owner", on && isOwner());
+    $("#mgrBtn").title = on? (currentManager? `Unlocked as ${currentManager} — click to lock`:"Unlocked — click to lock") : "Unlock manager editing";
+  }
+  function lockManager(){
+    document.body.classList.remove("mgr"); document.body.classList.remove("owner");
+    currentManager=null; currentManagerId=null; currentIsOwner=false; CLOUD.pin=null;
+    if(!$("#view-team").hidden || !$("#view-codes").hidden) switchView("board");
+    reflectMgr(); renderManagers(); toast("Locked — view-only for teammates");
+  }
+  function unlockManager(m, ownerFlag){ // m = manager object, or undefined for the no-PIN path
+    currentManager = m ? m.name : null; currentManagerId = m ? m.id : null;
+    if(m && m.pin!=null && m.pin!=="") CLOUD.pin = m.pin;
+    currentIsOwner = (ownerFlag!==undefined) ? !!ownerFlag : !!(m && DATA.settings && m.id===DATA.settings.ownerId);
+    document.body.classList.add("mgr");
+    if(DATA.settings){ DATA.settings.lastUnlock={ name:(m?m.name:"a manager"), at:now() }; save(); }
+    reflectMgr(); renderManagers();
+    toast(m ? `Unlocked as ${m.name} — full editing on` : "Manager unlocked — full editing on");
+  }
+
+  /* unlock via a manager's own PIN */
+  function openPin(){
+    if(!managers().length){ openManager("first"); return; }  // no managers yet → set up the first login
+    $("#pinTitle").textContent="Enter your manager PIN";
+    $("#pinMsg").textContent="Unlock editing with your own PIN. Teammates only ever see a view-only board.";
+    $("#pinGo").textContent="Unlock";
+    $("#pinSkip").style.display="none";
+    $("#pinHint").textContent="";
+    $("#pinInput").value="";
+    openModal("pinScrim");
+    setTimeout(()=>$("#pinInput").focus(),40);
+  }
+  async function submitPin(){
+    const v=$("#pinInput").value.trim(); if(!v) return;
+    if(CLOUD.on && !CLOUD.offline){
+      try{
+        const j=await fetchBoard(v);
+        if(j && j.auth && j.auth.ok){
+          if(j.board){ DATA=j.board; ensureSettings(); CLOUD.rev=j.rev||CLOUD.rev; }
+          CLOUD.pin=v; closeModal($("#pinScrim"));
+          unlockManager({ id:j.auth.manager.id, name:j.auth.manager.name, pin:v }, j.auth.isOwner);
+          render();
+        } else { toast("That PIN doesn't match any manager"); $("#pinInput").select(); }
+      }catch(e){ toast("Can't reach the board — check your connection"); }
+      return;
+    }
+    const m=managers().find(x=>x.pin===v);
+    if(m){ closeModal($("#pinScrim")); unlockManager(m, DATA.settings && m.id===DATA.settings.ownerId); }
+    else { toast("That PIN doesn't match any manager"); $("#pinInput").select(); }
+  }
+  $("#mgrBtn").onclick=()=>{ if(document.body.classList.contains("mgr")) lockManager(); else openPin(); };
+  $("#pinGo").onclick=submitPin;
+  $("#pinInput").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); submitPin(); } });
+  $("#pinSkip").onclick=()=>{ closeModal($("#pinScrim")); unlockManager(); };
+
+  /* manage the roster of managers (owner-only edits, via the Managers tab) */
+  let mgrMode="add", mgrEditId=null;
+  function openManager(mode, id){
+    mgrMode=mode; mgrEditId=id||null;
+    const isChange = mode==="change";
+    const m = isChange ? managers().find(x=>x.id===id) : null;
+    $("#mgrModalTitle").textContent = mode==="first" ? "Set up the first manager" : isChange ? "Change PIN" : "Add a manager";
+    $("#mgrModalMsg").textContent = mode==="first"
+      ? "Create your manager login. You'll use this PIN to unlock editing — teammates never see it."
+      : isChange ? `Set a new PIN for ${m?m.name:"this manager"}.`
+      : "Add a coach or manager. They get their own PIN to unlock editing.";
+    $("#mgrNameField").style.display = isChange ? "none" : "flex";
+    $("#mgrNotNow").style.display = mode==="first" ? "inline-flex" : "none";
+    $("#mgrNameInput").value=""; $("#mgrPinInput").value="";
+    openModal("managerScrim");
+    setTimeout(()=>$(isChange ? "#mgrPinInput" : "#mgrNameInput").focus(),40);
+  }
+  function saveManager(){
+    const pin=$("#mgrPinInput").value.trim();
+    if(pin.length<4){ toast("PIN needs at least 4 characters"); return; }
+    if(!Array.isArray(DATA.settings.managers)) DATA.settings.managers=[];
+    if(mgrMode==="change"){
+      const m=DATA.settings.managers.find(x=>x.id===mgrEditId);
+      if(m && DATA.settings.managers.some(x=>x!==m && x.pin===pin)){ toast("Another manager already uses that PIN"); return; }
+      if(m){ m.pin=pin; logActivity(`changed ${m.name}'s PIN`); }
+      save(); renderManagers(); closeModal($("#managerScrim")); toast("PIN updated");
+      return;
+    }
+    const name=$("#mgrNameInput").value.trim();
+    if(!name){ toast("Add a name"); $("#mgrNameInput").focus(); return; }
+    if(DATA.settings.managers.some(x=>x.pin===pin)){ toast("That PIN is taken — pick another"); return; }
+    const m={ id:mid(), name, pin };
+    DATA.settings.managers.push(m);
+    if(mgrMode==="first" && !DATA.settings.ownerId) DATA.settings.ownerId=m.id;  // first login becomes owner
+    logActivity(mgrMode==="first" ? `set up the board as ${name}` : `added ${name} as a manager`, mgrMode==="first"?name:undefined);
+    save(); renderManagers(); closeModal($("#managerScrim"));
+    if(mgrMode==="first") unlockManager(m); else toast(`${name} added — they can unlock with that PIN`);
+  }
+  async function removeManager(id){
+    const m=managers().find(x=>x.id===id); if(!m) return;
+    if(DATA.settings && id===DATA.settings.ownerId){ toast("Make someone else the owner before removing this manager"); return; }
+    if(managers().length<=1){ toast("Keep at least one manager so you're not locked out"); return; }
+    const ok=await askConfirm(`Remove ${m.name} as a manager? Their PIN will stop working.`,
+      { title:"Remove manager", okLabel:"Remove", danger:true });
+    if(!ok) return;
+    DATA.settings.managers=DATA.settings.managers.filter(x=>x.id!==id); logActivity(`removed ${m.name} as a manager`); save(); renderManagers(); toast(`${m.name} removed`);
+  }
+  async function makeOwner(id){
+    const m=managers().find(x=>x.id===id); if(!m) return;
+    const ok=await askConfirm(`Make ${m.name} the owner? They'll be able to see and manage every code. You keep manager access but lose owner control of this tab.`,
+      { title:"Transfer owner", okLabel:"Make owner" });
+    if(!ok) return;
+    DATA.settings.ownerId=id; logActivity(`made ${m.name} the owner`); save(); reflectMgr();
+    if(!isOwner() && !$("#view-codes").hidden) switchView("board");
+    renderManagers(); toast(`${m.name} is now the owner`);
+  }
+  function renderManagers(){
+    const ms=managers();
+    const state=$("#mgrState");
+    if(state) state.textContent = ms.length
+      ? `${ms.length} manager${ms.length!==1?"s":""} can unlock editing. Codes are managed by the owner in the Managers tab.`
+      : "No managers yet. The first person to open Manager sets up their login.";
+    const list=$("#codesList");
+    if(list){
+      if(!isOwner()){ list.innerHTML=""; }  // never place codes in the DOM for non-owners
+      else {
+        const teamNames=new Set(DATA.people.map(p=>p.name.toLowerCase()));
+        list.innerHTML = ms.map(m=>{
+          const isOwn = DATA.settings && m.id===DATA.settings.ownerId;
+          const onBoard = teamNames.has(m.name.toLowerCase());
+          const you = currentManagerId===m.id;
+          return `<div class="code-row" data-id="${m.id}">
+            <div>
+              <div class="cr-name">${esc(m.name)}${you?' <span class="cr-tag owner">you</span>':''}</div>
+              <div class="cr-tags">${isOwn?'<span class="cr-tag owner">Owner</span>':''}${onBoard?'<span class="cr-tag board">On leaderboard</span>':'<span class="cr-tag">Manager only</span>'}</div>
+            </div>
+            <div class="cr-code">${ui.showCodes?esc(m.pin):maskCode(m.pin)}</div>
+            <div class="cr-acts">
+              <button class="btn" data-mgract="change" data-id="${m.id}">Change PIN</button>
+              ${isOwn?'':`<button class="btn" data-mgract="makeowner" data-id="${m.id}">Make owner</button>`}
+              ${isOwn?'':`<button class="btn danger" data-mgract="remove" data-id="${m.id}">Remove</button>`}
+            </div>
+          </div>`;
+        }).join("");
+      }
+    }
+    const l=DATA.settings && DATA.settings.lastUnlock;
+    const txt = l ? `Last unlocked by ${l.name} · ${fmtDateTime(l.at)}` : "";
+    if($("#lastUnlockState")) $("#lastUnlockState").textContent = txt;
+    if($("#teamLastUnlock")) $("#teamLastUnlock").textContent = txt;
+  }
+  $("#addMgrBtn2").onclick=()=>openManager("add");
+  $("#toggleCodes").onclick=()=>{ ui.showCodes=!ui.showCodes; $("#toggleCodesLabel").textContent = ui.showCodes?"Hide codes":"Show codes"; renderManagers(); };
+  $("#codesList").addEventListener("click",e=>{ const b=e.target.closest("[data-mgract]"); if(!b) return;
+    if(b.dataset.mgract==="change") openManager("change", b.dataset.id);
+    else if(b.dataset.mgract==="makeowner") makeOwner(b.dataset.id);
+    else removeManager(b.dataset.id); });
+  $("#mgrModalSave").onclick=saveManager;
+  $("#mgrPinInput").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); saveManager(); } });
+  $("#mgrNotNow").onclick=()=>{ closeModal($("#managerScrim")); unlockManager(); };
+
+  /* ---------- activity log (per-action history) ---------- */
+  function openActivity(){
+    const list=$("#actList"); const acts=DATA.activity||[];
+    $("#actSub").textContent = acts.length ? `${acts.length} recent action${acts.length!==1?"s":""}, newest first.` : "Nothing logged yet.";
+    list.innerHTML = acts.length
+      ? acts.map(a=>`<div class="hist-item"><div class="ci">
+          <div class="ct">${esc(a.actor)}</div>
+          <div class="cn">${esc(a.text)}</div>
+          <div class="cd">${fmtDateTime(a.at)}</div></div></div>`).join("")
+      : `<p style="color:var(--ink-faint)">Logged callouts, approved nominations, and roster changes will show up here — with who did them.</p>`;
+    openModal("activityScrim");
+  }
+  $("#activityBtn").onclick=openActivity;
+
+  /* ---------- board / theme toggles ---------- */
+  $("#boardBtn").onclick=()=>{ document.body.classList.toggle("board");
+    if(document.body.classList.contains("board")){ document.body.classList.remove("mgr"); document.body.classList.remove("owner");
+      currentManager=null; currentManagerId=null; switchView("board"); reflectMgr(); }
+    toast(document.body.classList.contains("board")? "Board mode — clean display for the BOH screen":"Board mode off"); };
+
+  function applyTheme(t){ if(t) document.documentElement.setAttribute("data-theme",t); render(); }
+  $("#themeBtn").onclick=()=>{
+    const cur=document.documentElement.getAttribute("data-theme");
+    const sysDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const isDark = cur ? cur==="dark" : sysDark;
+    const next = isDark? "light":"dark";
+    localStorage.setItem(KEY+"_theme", next); applyTheme(next);
+  };
+  (function initTheme(){ const t=localStorage.getItem(KEY+"_theme"); if(t) document.documentElement.setAttribute("data-theme",t); })();
+
+  /* ---------- toast ---------- */
+  let toastT;
+  function toast(msg){ const el=$("#toast"); el.textContent=msg; el.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove("show"),2600); }
+  function celebrate(msg){ toast(msg); }
+
+  /* ---------- init ---------- */
+  fillTierSelect(); buildCalloutGrid(); buildTierFilter(); buildNomGrid();
+  $$("#recentRange [data-range]").forEach(x=>x.setAttribute("aria-pressed", x.dataset.range===ui.recentRange));
+  reflectMgr(); renderManagers();
+  render();     // instant paint from local cache
+  boot();       // then sync with the cloud (falls back to this device if unreachable)
+})();
+</script>

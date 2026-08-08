@@ -1,0 +1,429 @@
+{
+  "app": "mammoth-leaderboard",
+  "version": 1,
+  "exported": 1786216345723,
+  "data": {
+    "people": [
+      {
+        "id": "pnapob6j",
+        "name": "Abigail Singer",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pq8d1r94",
+        "name": "Aidan Boudreaux",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pr1z2l2v",
+        "name": "Alison McCloud",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "prggbsy4",
+        "name": "Antonio Mosqueda",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "p14ilv2d",
+        "name": "Ashley Abasolo",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "parmc72z",
+        "name": "Audreena Javonovich",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "p25nlbjt",
+        "name": "Avery Simpson",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pd1mr7lk",
+        "name": "Branden Lummus",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pof5zhv9",
+        "name": "Brennen McAllister",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "plzmzrv9",
+        "name": "Carley Durbin",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pcuft49s",
+        "name": "Cerisse Smith",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pb97jv84",
+        "name": "Christine Pletcher",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pggoqoep",
+        "name": "Daisy White",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "p3rm1hci",
+        "name": "Elizabeth Tanner",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pg9638pb",
+        "name": "Gabriela Castillo",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pgcrsy79",
+        "name": "Gavin Klassen",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pa9pnefd",
+        "name": "Ivy Taff",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pdxg1cfr",
+        "name": "Jamell Jackson",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pueov042",
+        "name": "Jayden Cudmore",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "p2ym7uw8",
+        "name": "Jessica Duckett",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "p0bzcvc5",
+        "name": "Joey Reynolds",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pjlte3xh",
+        "name": "Josue Chamagua",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "plcij7wf",
+        "name": "Kaeli Villa",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "ps4svi8y",
+        "name": "Karley Goracke",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pms1nz0h",
+        "name": "Kris Anderson",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pg8luaoz",
+        "name": "Lexia Sanchez",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pqh7njih",
+        "name": "Logan Overbey",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pxtuxovw",
+        "name": "Lyndsey Davis-Stuart",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "paobqvj5",
+        "name": "Lyric Williams",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "p5boumt2",
+        "name": "Marcos Jimenez",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "p0tvmr0f",
+        "name": "Mary Rincones",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pt6qchdo",
+        "name": "Nieves Antonio Cruz",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "ptbpmvti",
+        "name": "Niyahna Scales",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "p3qgu2hi",
+        "name": "Oscar Gonzalez",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "p4t53q6y",
+        "name": "Ramiro Vazquez",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "p8bm3iak",
+        "name": "Ricardo Villalpando",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pjdjtjle",
+        "name": "Saint McClure",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "puvjtf2l",
+        "name": "Tia Huynh",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pkkj8l3c",
+        "name": "Tristen Jackson",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pd3503ke",
+        "name": "Victoria Thomas",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "pv5o2kmd",
+        "name": "Yasmine Hatfield",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      },
+      {
+        "id": "p5qp7xt8",
+        "name": "Zoey Garrett",
+        "photo": null,
+        "tier": "auto",
+        "mentor": false,
+        "front": false,
+        "callouts": []
+      }
+    ],
+    "updated": 1786216345723,
+    "settings": {
+      "managers": [
+        {
+          "id": "mpifw0zm",
+          "name": "Sheila Atchison",
+          "pin": "2468"
+        },
+        {
+          "id": "mx52ewu6",
+          "name": "Tanner Micheli",
+          "pin": "1357"
+        },
+        {
+          "id": "m608lfco",
+          "name": "Alan Swanson",
+          "pin": "1122"
+        },
+        {
+          "id": "mbv24jus",
+          "name": "Jason Farrant",
+          "pin": "3344"
+        },
+        {
+          "id": "malxm3le",
+          "name": "Antonio Mosqueda",
+          "pin": "5566"
+        },
+        {
+          "id": "mq991cal",
+          "name": "Joey Reynolds",
+          "pin": "7788"
+        },
+        {
+          "id": "mm2eascu",
+          "name": "Christine Pletcher",
+          "pin": "9900"
+        }
+      ],
+      "ownerId": "mpifw0zm"
+    },
+    "nominations": []
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "clubhouse-leaderboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mammoth Clubhouse recognition leaderboard — cloud-synced (Vercel + Upstash Redis).",
+  "dependencies": {
+    "@upstash/redis": "^1.34.0"
+  }
+}
