@@ -1,4 +1,7 @@
 <title>The Leaderboard — Mammoth Clubhouse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&display=swap" rel="stylesheet">
 <style>
   /* ============================================================
      THE LEADERBOARD — Mammoth Clubhouse scoreboard
@@ -340,6 +343,43 @@
   .sync.busy { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); }
   .sync.warn { color: #e0705f; border-color: #e0705f55; }
   body.board .sync-line { display:none; }
+
+  /* ===== GAME ON! Board redesign — scoped to #view-board ===== */
+  :root { --turf-deep:#064026; }
+  @keyframes chTrot { 0%,100%{transform:translateY(0) rotate(-1deg)} 50%{transform:translateY(-8px) rotate(1deg)} }
+  @keyframes chFlagWave { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+  #view-board { background:var(--turf); border-radius:28px; padding:34px 30px 40px; color:var(--stadium);
+    font-family:'Jost','Futura PT',Futura,var(--font-ui); -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  #view-board > #strip { display:grid; grid-template-columns:1.14fr 1fr 1fr; align-items:end; gap:18px; margin:26px 0 0; }
+  #view-board .controls { margin-top:26px; }
+  #roster { display:block; }
+  #roster .empty { color:rgba(0,0,0,.55); }
+  #roster .empty h3 { color:#0A693C; }
+  #roster .grow:hover { background:#F1EEE6 !important; }
+  body.mgr #roster .rowbtns { display:flex; gap:6px; flex:none; margin-left:6px; }
+  body:not(.mgr) #roster .rowbtns { display:none; }
+  #roster .rowbtns .btn.ghost { color:#0A693C; border-color:rgba(0,0,0,.16); background:transparent; }
+  #roster .rowbtns .btn.ghost:hover { background:rgba(0,0,0,.06); }
+  .board-flag { width:46px; height:auto; flex:none; animation:chFlagWave 4s ease-in-out infinite; transform-origin:8% 90%; }
+  .bogey-run { width:360px; flex:none; align-self:flex-end; margin-bottom:-8px; opacity:.95; animation:chTrot 3.4s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce){ .board-flag,.bogey-run{ animation:none !important; } }
+  @media (max-width:820px){
+    #view-board > #strip { grid-template-columns:1fr; }
+    .board-hero-row { flex-wrap:wrap; }
+    .board-h1 { font-size:70px !important; }
+    .bogey-run { width:200px !important; }
+  }
+  @media (max-width:640px){
+    #view-board { padding:20px 16px 28px; }
+    .board-h1 { font-size:52px !important; }
+    .bogey-run { display:none; }
+    #roster .grow { flex-wrap:wrap; gap:10px 14px !important; padding:16px 18px !important; }
+    #roster .grow > div:nth-child(4), #roster .grow > div:nth-child(5){ display:none !important; }
+    #boardLadder { grid-template-columns:repeat(2,1fr) !important; }
+    #boardLadder > div { grid-column-start:auto !important; }
+    .board-foot-title { font-size:26px !important; }
+    .bogey-sit { height:110px !important; }
+  }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
   /* ---------- tabs ---------- */
@@ -571,6 +611,20 @@
     </nav>
 
     <div id="view-board">
+      <div class="board-hero" style="position:relative;overflow:hidden;border-radius:28px;background:var(--turf-deep);background-image:repeating-linear-gradient(90deg, rgba(254,249,243,.055) 0 2px, transparent 2px 22px);border:2px solid rgba(217,224,71,.35);padding:38px 40px 34px">
+        <div class="board-hero-row" style="display:flex;align-items:flex-start;justify-content:space-between;gap:32px">
+          <div style="min-width:0">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+              <img src="assets/CH_Flag_Move.svg" alt="Clubhouse flag" class="board-flag">
+              <span style="font-size:13px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(254,249,243,.62);white-space:nowrap">The Leaderboard · Mammoth Clubhouse</span>
+            </div>
+            <h1 class="board-h1" style="margin:0;font-family:'Jost','Futura PT',Futura,sans-serif;font-weight:700;font-size:112px;line-height:.86;letter-spacing:.06em;text-transform:uppercase;background:none;-webkit-background-clip:border-box;background-clip:border-box;-webkit-text-fill-color:var(--move);color:var(--move)">Game<br>On!</h1>
+            <p style="margin:22px 0 0;max-width:430px;font-size:18px;line-height:1.45;color:rgba(254,249,243,.82)">No sidelines. No spectators. Every teammate on this roster is in the game, tee box to Legend. Every callout earns a step up.</p>
+          </div>
+          <img src="assets/Bogey_Run_White.png" alt="Bogey running" class="bogey-run">
+        </div>
+      </div>
+
       <section class="strip" id="strip"></section>
 
       <section class="controls">
@@ -599,7 +653,29 @@
         </button>
       </section>
 
-      <section class="roster" id="roster"></section>
+      <div class="board-roster" style="margin-top:26px;border-radius:24px;overflow:hidden;background:#FEF9F3;color:#000">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 26px;background:#000;color:#FEF9F3">
+          <span style="font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase">The Roster</span>
+          <span style="font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;opacity:.55">Tap a name for the breakdown</span>
+        </div>
+        <section class="roster" id="roster"></section>
+      </div>
+
+      <div class="board-ladder-panel" style="margin-top:34px;border-radius:24px;border:2px solid rgba(217,224,71,.3);padding:26px 28px;background:var(--turf-deep)">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:20px">
+          <span style="font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--move)">Your path up the roster</span>
+          <span style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:rgba(254,249,243,.5)">No handicaps.</span>
+        </div>
+        <div id="boardLadder" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"></div>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:30px;padding:0 8px">
+        <img src="assets/Bogey_Sit_White.png" alt="Bogey sitting" class="bogey-sit" style="height:150px;width:auto;opacity:.9">
+        <div style="text-align:right">
+          <div class="board-foot-title" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:36px;letter-spacing:-.02em;color:var(--move)">Fore the love of the game.</div>
+          <div style="font-size:15px;margin-top:8px;color:rgba(254,249,243,.7)">Bad swings are worth cheering for. Come up swinging.</div>
+        </div>
+      </div>
     </div>
 
     <div id="view-recent" hidden>
@@ -1032,7 +1108,7 @@
 
   /* ---------- state ---------- */
   let DATA = load();
-  let ui = { sort:"callouts", filter:"all", q:"", editId:null, logSel:null, logSrc:"coach", photoBuf:undefined, recentRange:"7d", nomSel:null, showCodes:false };
+  let ui = { sort:"callouts", filter:"all", q:"", editId:null, logSel:null, logSrc:"coach", photoBuf:undefined, recentRange:"7d", nomSel:null, showCodes:false, openRow:null };
 
   function load(){
     try{ const raw=localStorage.getItem(KEY); if(raw){ const d=JSON.parse(raw); if(d&&Array.isArray(d.people)) return d; } }catch(e){}
@@ -1140,6 +1216,7 @@
 
   function render(){
     renderStrip();
+    renderBoardLadder();
     renderRoster();
     renderTeam();
     renderHow();
@@ -1254,49 +1331,64 @@
     }).join("");
   }
 
-  function renderStrip(){
-    const wk=thisWeek();
-    const withStats = DATA.people.map(p=>({p, s:stats(p), tier:currentTier(p)}));
-    // weekly leader
-    const wl = withStats.filter(x=>x.s.week>0).sort((a,b)=>b.s.week-a.s.week)[0];
-    // total callouts this week (whole team)
-    const teamWeek = withStats.reduce((n,x)=>n+x.s.week,0);
-    // top current tier holder (last Legend/Playmaker)
-    const topTierHolder = withStats.slice().sort((a,b)=> (TIER_INDEX[b.tier]-TIER_INDEX[a.tier]) || (b.s.total-a.s.total))[0];
-    const totalLogged = withStats.reduce((n,x)=>n+x.s.total,0);
-
-    const strip = $("#strip");
-    const tiles = [];
-    tiles.push(`<div class="tile lead">
-      <div class="cap">🔥 This week's leader</div>
-      <div class="tile-row">${ wl ? avatarHTML(wl.p) : placeholderAv() }
-        <div><div class="who">${ wl? esc(wl.p.name):"—"}</div>
-        <div class="meta">${ wl? `${wl.s.week} callout${wl.s.week!==1?"s":""} since Monday`:"No callouts logged yet this week"}</div></div>
-      </div></div>`);
-    tiles.push(`<div class="tile">
-      <div class="cap">🏅 Top of the roster</div>
-      <div class="tile-row">${ topTierHolder? avatarHTML(topTierHolder.p):placeholderAv() }
-        <div><div class="who">${ topTierHolder? esc(topTierHolder.p.name):"—"}</div>
-        <div class="meta">${ topTierHolder? `<span style="color:${tierColor(topTierHolder.tier)};font-weight:800">${TIER_BY_ID[topTierHolder.tier].name}</span> · ${topTierHolder.s.total} callouts`:"Add your roster to begin"}</div></div>
-      </div></div>`);
-    tiles.push(`<div class="tile">
-      <div class="cap">📣 Callouts this week</div>
-      <div class="tile-row"><div class="big">${teamWeek}<br><small>team total · ${totalLogged} all-time</small></div></div></div>`);
-    // closest to leveling up — smallest remaining to next tier (min 1 callout on the board so it's earned momentum)
-    const climbing = withStats
-      .map(x=>({ x, nt:nextTierInfo(x.p) }))
-      .filter(o=> o.nt && o.nt.remaining>0 && o.x.s.total>0)
-      .sort((a,b)=> a.nt.remaining-b.nt.remaining || b.x.s.total-a.x.s.total)[0];
-    tiles.push(`<div class="tile">
-      <div class="cap">⛳ Closest to leveling up</div>
-      ${ climbing ? `<div class="tile-row">${avatarHTML(climbing.x.p)}
-        <div><div class="who">${esc(climbing.x.p.name)}</div>
-        <div class="meta"><b style="color:var(--ink)">${climbing.nt.remaining}</b> callout${climbing.nt.remaining!==1?"s":""} from <span style="color:${tierColor(climbing.nt.tier.id)};font-weight:800">${climbing.nt.tier.name}</span></div></div>
-      </div>` : `<div class="tile-row">${placeholderAv()}<div><div class="who">—</div><div class="meta">Log a callout to start the climb</div></div></div>` }
-    </div>`);
-    strip.innerHTML = tiles.join("");
+  /* ---------- GAME ON! board helpers ---------- */
+  const B_CREAM="#FEF9F3", B_TURF="#0A693C", B_MOVE="#D9E047", B_VIOLET="#EABEEA";
+  function tierMin(id){ const r=TIER_BY_ID[id] && TIER_BY_ID[id].req; return (r && r.total) || 0; }
+  function boardAvatar(p, size, bg, fg){
+    const base=`width:${size}px;height:${size}px;flex:none;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:'Jost',sans-serif;font-weight:700;font-size:${Math.round(size*0.36)}px;letter-spacing:.02em;background:${bg};color:${fg}`;
+    if(p.photo) return `<div style="${base}"><img src="${p.photo}" alt="${esc(p.name)}" style="width:100%;height:100%;object-fit:cover"></div>`;
+    return `<div style="${base}">${esc(initials(p.name))}</div>`;
   }
-  function placeholderAv(){ return `<div class="avatar" style="--tier-c:var(--line);background:var(--panel-2);color:var(--ink-faint);font-size:22px">·</div>`; }
+  function boardTierChip(id, dark){
+    let bg,fg;
+    if(id==="legend"){ bg="#000"; fg=B_MOVE; }
+    else if(id==="playmaker"){ bg=B_TURF; fg=B_CREAM; }
+    else if(id==="mvp"){ bg=B_VIOLET; fg="#000"; }
+    else if(id==="allstar"){ bg=B_MOVE; fg="#000"; }
+    else { bg="transparent"; fg= dark?"rgba(254,249,243,.8)":"rgba(0,0,0,.6)"; }
+    const bd = bg==="transparent" ? (dark?"1px solid rgba(254,249,243,.35)":"1px solid rgba(0,0,0,.2)") : "1px solid transparent";
+    return `display:inline-block;padding:7px 14px;border-radius:99px;background:${bg};color:${fg};border:${bd};font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap`;
+  }
+
+  function renderStrip(){  // the podium: top 3 by total callouts
+    const strip=$("#strip");
+    const top = DATA.people.map(p=>({p, s:stats(p)}))
+      .sort((a,b)=> b.s.total-a.s.total || b.s.week-a.s.week).slice(0,3);
+    const bgs=[B_MOVE, B_VIOLET, B_CREAM];
+    strip.innerHTML = top.map((x,i)=>{
+      const {p,s}=x, first=i===0, tierId=currentTier(p), T=TIER_BY_ID[tierId];
+      const last=p.callouts[p.callouts.length-1];
+      const av=boardAvatar(p, first?48:42, first?"#000":B_TURF, first?B_MOVE:B_CREAM);
+      return `<div style="position:relative;border-radius:24px;padding:${first?'34px 28px 28px':'26px 24px 24px'};background:${bgs[i]};color:#000;box-shadow:0 18px 0 -6px rgba(0,0,0,.18)">
+        <div style="position:absolute;top:-14px;left:${first?'28px':'24px'};padding:5px 14px;border-radius:99px;background:#000;color:${B_MOVE};font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase">${['1st','2nd','3rd'][i]}</div>
+        <div style="display:flex;align-items:center;gap:14px">${av}
+          <div style="min-width:0"><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:26px;line-height:1.05;letter-spacing:-.02em">${esc(p.name)}</div></div>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:10px;margin-top:22px">
+          <span style="font-family:'Jost',sans-serif;font-weight:700;font-size:56px;line-height:.9">${s.total}</span>
+          <span style="font-size:13px;letter-spacing:.16em;text-transform:uppercase;opacity:.6">callouts</span>
+        </div>
+        <div style="${boardTierChip(tierId,false)};margin-top:14px">${T.name}</div>
+        <div style="font-size:14px;margin-top:12px;opacity:.72;font-style:italic">${last?`“${esc(last.type)}”`:'No callouts yet'}</div>
+      </div>`;
+    }).join("");
+  }
+
+  function renderBoardLadder(){
+    const host=$("#boardLadder"); if(!host) return;
+    host.innerHTML = TIERS.map((t)=>{
+      const teebox = t.id==="teebox";
+      const shift = t.id==="mvp" ? ";grid-column-start:2" : "";
+      const bg = teebox ? "rgba(254,249,243,.07)" : B_MOVE;
+      const fg = teebox ? "rgba(254,249,243,.85)" : "#000";
+      const bd = teebox ? "rgba(254,249,243,.16)" : "transparent";
+      const req = tierMin(t.id) ? `${tierMin(t.id)} callouts` : "Step up";
+      return `<div style="border-radius:16px;padding:16px 14px;background:${bg};color:${fg};border:1px solid ${bd}${shift}">
+        <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:16px;letter-spacing:-.01em;line-height:1.1">${t.name.toUpperCase()}</div>
+        <div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-top:8px;opacity:.66">${req}</div>
+      </div>`;
+    }).join("");
+  }
 
   function renderRoster(){
     const host=$("#roster");
@@ -1313,27 +1405,35 @@
       return;
     }
     host.innerHTML = list.map((x,i)=>{
-      const {p,s,tier}=x; const T=TIER_BY_ID[tier]; const c=tierColor(tier);
+      const {p,s}=x; const tierId=currentTier(p); const T=TIER_BY_ID[tierId];
       const rank=i+1;
       const last=p.callouts[p.callouts.length-1];
-      const nt=nextTierInfo(p);
-      const medal = rank<=3 ? `<span class="medal">${["1st","2nd","3rd"][rank-1]}</span>` : "";
-      return `<article class="row ${rank<=3?'top'+rank:''}" style="--tier-c:${c}" data-id="${p.id}">
-        <div class="rank">${rank}${medal}</div>
-        ${avatarHTML(p)}
-        <div class="person">
-          <div class="name">${esc(p.name)} <span class="tierbadge" style="background:${c};color:${inkOn(c)};border-color:${c}">${T.name}</span></div>
-          ${ last ? `<div class="lastcall"><span class="calltag">${esc(last.type)}</span>
-              ${ last.note? `<span class="note">"${esc(last.note)}"</span>`:""}
-              <span class="src">${SRC_LABEL[last.src]||""} · ${ago(last.date)}</span></div>`
-            : `<div class="lastcall"><span class="note">No callouts yet — catch them doing something right.</span></div>` }
-          ${ nt ? `<div class="progress" title="${s.total}/${nt.tier.req?.total||''} toward ${nt.tier.name}"><i style="width:${nt.pct}%;background:${tierColor(nt.tier.id)}"></i></div>
-            <div class="nexttier">${ nt.remaining>0 ? `<b>${nt.remaining}</b> more toward <b>${nt.tier.name}</b>` : `Ready for <b>${nt.tier.name}</b> — confirm the requirements`}</div>` : `<div class="nexttier">🏆 Legend — the course record.</div>` }
-        </div>
-        <div class="score">
-          <div class="count">
-            <div class="n">${s.total}</div><div class="l">Callouts</div>
-            ${ s.week>0 ? `<div class="wk">▲ ${s.week} this week</div>`:"" }
+      const cIdx=TIER_INDEX[tierId]; const nextTier=TIERS[cIdx+1]||null;
+      const curMin=tierMin(tierId);
+      const pct = nextTier ? Math.max(6, Math.min(100, Math.round((s.total-curMin)/((tierMin(nextTier.id))-curMin)*100))) : 100;
+      const nextLabel = nextTier ? `${Math.max(0, tierMin(nextTier.id)-s.total)} to ${nextTier.name}` : "Course record";
+      const barBg = tierId==="legend" ? "#000" : B_TURF;
+      const open = ui.openRow===p.id;
+      const av=boardAvatar(p, 36, B_TURF, B_MOVE);
+      const chip=(bg,fg)=>`padding:8px 14px;border-radius:99px;background:${bg};color:${fg};font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase`;
+      const drawer = open ? `<div style="display:flex;gap:14px;align-items:center;padding:0 26px 22px 96px;background:#F1EEE6;flex-wrap:wrap">
+          <div style="${chip(B_TURF,B_CREAM)}">Coach · ${s.coach}</div>
+          <div style="${chip(B_MOVE,'#000')}">Teammate · ${s.peer}</div>
+          <div style="${chip(B_VIOLET,'#000')}">Athlete · ${s.athlete}</div>
+          <div style="font-size:14px;font-style:italic;opacity:.7">${ last? `Last: “${esc(last.type)}”` : 'No callouts yet' }</div>
+        </div>` : "";
+      return `<div class="grow" data-rowid="${p.id}" data-id="${p.id}" style="display:flex;align-items:center;gap:18px;padding:18px 26px;cursor:pointer;border-top:1px solid rgba(0,0,0,.08);background:${open?'#F1EEE6':'transparent'};transition:background .15s">
+          <div style="width:52px;flex:none;font-family:'Jost',sans-serif;font-weight:700;font-size:26px;color:rgba(0,0,0,.28)">${rank}</div>
+          ${av}
+          <div style="flex:1;min-width:0"><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:21px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#000">${esc(p.name)}</div></div>
+          <div style="${boardTierChip(tierId,false)};width:130px;text-align:center;flex:none">${T.name}</div>
+          <div style="width:150px;flex:none">
+            <div style="height:10px;border-radius:99px;background:rgba(0,0,0,.09);overflow:hidden"><div style="height:100%;width:${pct}%;border-radius:99px;background:${barBg}"></div></div>
+            <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.5;margin-top:6px;color:#000">${esc(nextLabel)}</div>
+          </div>
+          <div style="width:96px;flex:none;text-align:right">
+            <div style="font-family:'Jost',sans-serif;font-weight:700;font-size:30px;line-height:1;color:#000">${s.total}</div>
+            ${ s.week>0 ? `<div style="font-size:12px;font-weight:600;color:#0A693C">+${s.week} this week</div>` : "" }
           </div>
           <div class="rowbtns">
             <button class="btn btn-icon ghost" data-act="add" data-id="${p.id}" title="Log a callout for ${esc(p.name)}">
@@ -1346,8 +1446,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
             </button>
           </div>
-        </div>
-      </article>`;
+        </div>${drawer}`;
     }).join("");
   }
 
@@ -1652,6 +1751,13 @@
     if(b.dataset.act==="edit") openTeammate(p);
     else if(b.dataset.act==="hist") openHist(p);
     else if(b.dataset.act==="add"){ if(!document.body.classList.contains("mgr")) return; openLog(p.id); }
+  });
+  // tap a roster row (not a manager button) to expand the Coach/Teammate/Athlete breakdown
+  $("#roster").addEventListener("click",e=>{
+    if(e.target.closest("[data-act]")) return;      // manager buttons handled above
+    const row=e.target.closest("[data-rowid]"); if(!row) return;
+    ui.openRow = ui.openRow===row.dataset.rowid ? null : row.dataset.rowid;
+    renderRoster();
   });
 
   /* ---------- backup / restore / downloads ---------- */
