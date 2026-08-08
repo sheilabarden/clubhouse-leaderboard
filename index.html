@@ -360,6 +360,17 @@
   body:not(.mgr) #roster .rowbtns { display:none; }
   #roster .rowbtns .btn.ghost { color:#0A693C; border-color:rgba(0,0,0,.16); background:transparent; }
   #roster .rowbtns .btn.ghost:hover { background:rgba(0,0,0,.06); }
+  /* Recent tab — brand board */
+  #view-recent { background:var(--turf); border-radius:28px; padding:34px 30px 40px; color:var(--stadium); font-family:'Jost','Futura PT',Futura,var(--font-ui); }
+  #view-recent .seg { background:rgba(254,249,243,.08); border:1px solid rgba(217,224,71,.4); }
+  #view-recent .seg button { color:rgba(254,249,243,.8); }
+  #view-recent .seg button[aria-pressed="true"] { background:var(--move); color:#000; box-shadow:none; }
+  #view-recent #huddleBtn.solid { background:var(--move); color:#000; border-color:transparent; }
+  #view-recent #huddleBtn.solid:hover { box-shadow:0 8px 22px -10px rgba(217,224,71,.6); }
+  #recentFeed { display:block; }
+  #recentFeed .empty { color:rgba(0,0,0,.55); }
+  #recentFeed .empty h3 { color:#0A693C; }
+  @media (max-width:640px){ #view-recent { padding:20px 16px 28px; } #recentFeed .fitem { flex-wrap:wrap; } }
   .board-flag { width:46px; height:auto; flex:none; animation:chFlagWave 4s ease-in-out infinite; transform-origin:8% 90%; }
   .bogey-run { width:360px; flex:none; align-self:flex-end; margin-bottom:-8px; opacity:.95; animation:chTrot 3.4s ease-in-out infinite; }
   @media (prefers-reduced-motion: reduce){ .board-flag,.bogey-run{ animation:none !important; } }
@@ -680,12 +691,15 @@
     </div>
 
     <div id="view-recent" hidden>
-      <section class="team-head">
+      <div class="rec-head" style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:22px">
         <div>
-          <h2 class="team-title">Recent Callouts</h2>
-          <p class="team-sub">Every recognition, newest first. Read one out loud at pre-shift.</p>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <img src="assets/CH_Flag_Move.svg" alt="Clubhouse flag" class="board-flag" style="width:38px">
+            <span style="font-size:13px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(254,249,243,.62)">The Recognition Feed</span>
+          </div>
+          <p style="margin:0;max-width:54ch;font-size:15px;color:rgba(254,249,243,.78)">Every recognition, newest first. Read one out loud at pre-shift.</p>
         </div>
-        <div class="team-actions">
+        <div class="rec-actions" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
           <div class="seg" role="group" aria-label="Range" id="recentRange">
             <button data-range="24h">Last 24h</button>
             <button data-range="7d" aria-pressed="true">This week</button>
@@ -695,8 +709,14 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg> Pre-shift huddle
           </button>
         </div>
-      </section>
-      <section class="feed" id="recentFeed"></section>
+      </div>
+      <div class="board-roster" style="border-radius:24px;overflow:hidden;background:#FEF9F3;color:#000">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 26px;background:#000;color:#FEF9F3">
+          <span style="font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase">Recent Callouts</span>
+          <span style="font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;opacity:.55">Newest first</span>
+        </div>
+        <section class="feed" id="recentFeed"></section>
+      </div>
     </div>
 
     <div id="view-wall" hidden>
@@ -1243,11 +1263,16 @@
     const cut = range==="24h"? now()-DAY : range==="7d"? thisWeek() : 0;
     const items=flatCallouts().filter(x=>x.c.date>=cut);
     if(!items.length){ host.innerHTML=`<div class="empty"><h3>Nothing here yet</h3><p>${range==="all"?"Log a callout to start the feed.":"No callouts in this range — try “All”."}</p></div>`; return; }
-    host.innerHTML = items.slice(0,120).map(({p,c})=>`<div class="fitem">
-      ${avatarHTML(p)}
-      <div><div class="fline"><b>${esc(p.name)}</b> earned <span class="ftype">${esc(c.type)}</span></div>
-        ${c.note?`<div class="fnote">"${esc(c.note)}"</div>`:""}</div>
-      <div class="fmeta">${ago(c.date)}<span class="src">${SRC_LABEL[c.src]||""}</span></div>
+    host.innerHTML = items.slice(0,120).map(({p,c})=>`<div class="fitem" style="display:flex;align-items:center;gap:16px;padding:16px 24px;border-top:1px solid rgba(0,0,0,.08)">
+      ${boardAvatar(p, 44, B_TURF, B_MOVE)}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:16px;color:#000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;letter-spacing:-.01em">${esc(p.name)}</span> <span style="color:rgba(0,0,0,.5)">earned</span> <span style="font-weight:700">${esc(c.type)}</span></div>
+        ${c.note?`<div style="font-size:13px;font-style:italic;color:rgba(0,0,0,.55);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">"${esc(c.note)}"</div>`:""}
+      </div>
+      <div style="text-align:right;flex:none">
+        <div style="${srcChip(c.src)}">${SRC_LABEL[c.src]||""}</div>
+        <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(0,0,0,.4);margin-top:6px">${ago(c.date)}</div>
+      </div>
     </div>`).join("");
   }
 
@@ -1350,6 +1375,11 @@
     else { bg="transparent"; fg= dark?"rgba(254,249,243,.8)":"rgba(0,0,0,.6)"; }
     const bd = bg==="transparent" ? (dark?"1px solid rgba(254,249,243,.35)":"1px solid rgba(0,0,0,.2)") : "1px solid transparent";
     return `display:inline-block;padding:7px 14px;border-radius:99px;background:${bg};color:${fg};border:${bd};font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap`;
+  }
+  function srcChip(src){
+    const map={ coach:[B_TURF,B_CREAM], peer:[B_MOVE,"#000"], athlete:[B_VIOLET,"#000"] };
+    const [bg,fg]=map[src]||["rgba(0,0,0,.08)","#000"];
+    return `display:inline-block;padding:5px 12px;border-radius:99px;background:${bg};color:${fg};font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase`;
   }
 
   function renderStrip(){  // the podium: top 3 by total callouts
