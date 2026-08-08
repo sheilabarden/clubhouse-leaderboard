@@ -1110,7 +1110,7 @@
   /* ---------- state ---------- */
   let DATA = load();
   let ui = { sort:"callouts", filter:"all", q:"", editId:null, logSel:null, logSrc:"coach", photoBuf:undefined, recentRange:"7d", nomSel:null, showCodes:false, openRow:null, page:1 };
-  const ROSTER_PER_PAGE = 15;
+  const ROSTER_PER_PAGE = 10;
 
   function load(){
     try{ const raw=localStorage.getItem(KEY); if(raw){ const d=JSON.parse(raw); if(d&&Array.isArray(d.people)) return d; } }catch(e){}
@@ -1779,7 +1779,7 @@
     ui.openRow = ui.openRow===row.dataset.rowid ? null : row.dataset.rowid;
     renderRoster();
   });
-  // roster pagination (15 per page)
+  // roster pagination (10 per page)
   $("#rosterPager").addEventListener("click",e=>{
     const b=e.target.closest("[data-page]"); if(!b || b.disabled) return;
     ui.page += (b.dataset.page==="next" ? 1 : -1);
