@@ -388,6 +388,27 @@
   #view-how .src-card .src-t { color:var(--move); }
   #view-how .src-card p { color:rgba(254,249,243,.72); }
   @media (max-width:640px){ #view-wall, #view-how { padding:20px 16px 28px; } }
+  /* "You" card + name picker + welcome */
+  #meCard:empty { display:none; }
+  .me-card { display:flex; align-items:center; gap:16px; background:#FEF9F3; color:#000; border-radius:20px; padding:16px 20px; margin:22px 0 0; border-left:6px solid var(--move); box-shadow:0 10px 0 -6px rgba(0,0,0,.14); }
+  .me-card .me-chip { display:inline-block; background:#000; color:var(--move); font-size:10px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; padding:2px 8px; border-radius:99px; }
+  .me-card .me-name { font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:22px; line-height:1.05; margin-top:5px; }
+  .me-card .me-meta { font-size:13px; color:rgba(0,0,0,.6); margin-top:4px; }
+  .me-card .me-meta b { color:#0A693C; }
+  .me-card .me-acts { margin-left:auto; display:flex; gap:8px; flex-wrap:wrap; }
+  .me-card .me-acts button { font-family:'Jost',sans-serif; font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; border-radius:99px; padding:8px 14px; cursor:pointer; border:1px solid rgba(0,0,0,.15); background:transparent; color:#0A693C; }
+  .me-card .me-acts button.solid { background:var(--move); color:#000; border-color:transparent; }
+  .me-cta { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; background:rgba(254,249,243,.08); border:1px dashed rgba(217,224,71,.5); border-radius:18px; padding:16px 20px; margin:22px 0 0; color:rgba(254,249,243,.9); font-size:15px; }
+  .me-cta b { color:var(--move); }
+  .me-cta button { flex:none; font-family:'Jost',sans-serif; font-size:13px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; border-radius:99px; padding:11px 20px; cursor:pointer; border:none; background:var(--move); color:#000; }
+  .me-list { display:flex; flex-direction:column; gap:4px; max-height:340px; overflow-y:auto; margin-top:6px; }
+  .me-list button { text-align:left; background:var(--bg-2); border:1px solid var(--line); border-radius:11px; padding:11px 14px; font:inherit; color:var(--ink); cursor:pointer; }
+  .me-list button:hover { border-color:var(--accent); }
+  .me-list .none { color:var(--ink-faint); padding:10px 4px; font-size:13px; }
+  .wlc-item { display:flex; gap:12px; align-items:flex-start; margin-top:10px; font-size:14px; color:var(--ink-soft); }
+  .wlc-item b { color:var(--ink); }
+  .wlc-n { flex:none; width:24px; height:24px; border-radius:50%; background:var(--accent); color:var(--accent-ink); font-weight:800; font-size:13px; display:grid; place-items:center; }
+  @media (max-width:640px){ .me-card { flex-wrap:wrap; } .me-card .me-acts { margin-left:0; width:100%; } }
   .board-flag { width:46px; height:auto; flex:none; animation:chFlagWave 4s ease-in-out infinite; transform-origin:8% 90%; }
   .bogey-run { width:360px; flex:none; align-self:flex-end; margin-bottom:-8px; opacity:.95; animation:chTrot 3.4s ease-in-out infinite; }
   @media (prefers-reduced-motion: reduce){ .board-flag,.bogey-run{ animation:none !important; } }
@@ -402,7 +423,8 @@
     .board-h1 { font-size:52px !important; }
     .bogey-run { display:none; }
     #roster .grow { flex-wrap:wrap; gap:10px 14px !important; padding:16px 18px !important; }
-    #roster .grow > div:nth-child(4), #roster .grow > div:nth-child(5){ display:none !important; }
+    #roster .grow > div:nth-child(4){ width:auto !important; }
+    #roster .grow > div:nth-child(5){ display:none !important; }
     #boardLadder { grid-template-columns:repeat(2,1fr) !important; }
     #boardLadder > div { grid-column-start:auto !important; }
     .board-foot-title { font-size:26px !important; }
@@ -652,6 +674,8 @@
           <img src="assets/Bogey_Run_White.png" alt="Bogey running" class="bogey-run">
         </div>
       </div>
+
+      <div id="meCard"></div>
 
       <section class="strip" id="strip"></section>
 
@@ -937,6 +961,35 @@
   </div>
 </div>
 
+<div class="scrim" id="welcomeScrim">
+  <div class="modal" style="width:min(460px,100%)" role="dialog" aria-modal="true" aria-labelledby="wlcTitle">
+    <div class="modal-h"><div><h2 id="wlcTitle">Welcome to the Leaderboard</h2><p>Mammoth Clubhouse · Wichita</p></div></div>
+    <div class="modal-b">
+      <p style="margin:0 0 4px;color:var(--ink-soft)">Two things you can do here:</p>
+      <div class="wlc-item"><span class="wlc-n">1</span><div><b>Find your name</b> to follow your callouts and see how close you are to the next tier.</div></div>
+      <div class="wlc-item"><span class="wlc-n">2</span><div><b>Cheer a teammate.</b> Caught someone doing it right? Tap their name, or hit Nominate, anytime.</div></div>
+      <div class="modal-f"><div class="right">
+        <button class="btn ghost" id="wlcSkip">Just looking</button>
+        <button class="btn solid" id="wlcFindMe">Find my name</button>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="meScrim">
+  <div class="modal" style="width:min(440px,100%)" role="dialog" aria-modal="true" aria-labelledby="meTitle">
+    <div class="modal-h"><div><h2 id="meTitle">Find your name</h2><p>Pick yourself to follow your progress. Saved on this device only.</p></div>
+      <button class="btn btn-icon ghost" data-close aria-label="Close">✕</button></div>
+    <div class="modal-b">
+      <label class="search" style="width:100%">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="meSearch" placeholder="Type your name…" autocomplete="off">
+      </label>
+      <div class="me-list" id="meList"></div>
+    </div>
+  </div>
+</div>
+
 <div class="scrim" id="nominateScrim">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="nomTitle">
     <div class="modal-h">
@@ -949,7 +1002,8 @@
       <div class="field"><label for="nomNote">What happened <span style="text-transform:none;color:var(--ink-faint);font-weight:400">(one sentence)</span></label>
         <textarea id="nomNote" placeholder="Taylor saw I was in the weeds on a six-top and jumped in without a word."></textarea></div>
       <div class="field"><label for="nomBy">Your name <span style="text-transform:none;color:var(--ink-faint);font-weight:400">(required · own your cheer)</span></label>
-        <input type="text" id="nomBy" placeholder="Your name" autocomplete="off"></div>
+        <input type="text" id="nomBy" placeholder="Your name" autocomplete="off">
+        <span class="hint" id="nomCount"></span></div>
       <div class="modal-f"><div class="right">
         <button class="btn ghost" data-close>Cancel</button>
         <button class="btn solid" id="nomSubmit">Send nomination</button>
@@ -1209,13 +1263,93 @@
       else { DATA=seed(); ensureSettings(); await pushBoard(); }
       CLOUD.offline=false; setStatus("synced");
     }catch(e){ CLOUD.on=false; CLOUD.offline=true; setStatus("offline"); }
-    CLOUD.booted=true; render(); renderManagers(); startPolling();
+    CLOUD.booted=true; render(); renderManagers(); startPolling(); showWelcomeIfNeeded();
   }
   function setStatus(kind,msg){
     const el=document.getElementById("syncStatus"); if(!el) return;
-    const map={ synced:["\u25CF Live","ok"], saving:["\u25CF Saving\u2026","busy"], offline:["\u25CF Offline \u2014 this device only","warn"], error:["\u25CF "+(msg||"Error"),"warn"] };
+    const map={ synced:["\u25CF Live","ok"], saving:["\u25CF Saving\u2026","busy"], offline:["\u25CF Offline \u00B7 this device only","warn"], error:["\u25CF "+(msg||"Error"),"warn"] };
     const v=map[kind]||map.synced; el.textContent=v[0]; el.className="sync "+v[1];
   }
+
+  /* ---------- teammate personalization: "You" card, name picker, welcome ---------- */
+  const K_ME=KEY+"_me", K_BY=KEY+"_by", K_NOMS=KEY+"_noms", K_WELCOME=KEY+"_welcome";
+  function getMe(){ return localStorage.getItem(K_ME)||null; }
+  function setMe(id){ if(id) localStorage.setItem(K_ME,id); else localStorage.removeItem(K_ME); }
+  function getNominatorName(){ return localStorage.getItem(K_BY)||""; }
+  function setNominatorName(n){ if(n) localStorage.setItem(K_BY,n); }
+  function getMyNoms(){ try{ return JSON.parse(localStorage.getItem(K_NOMS)||"[]"); }catch(e){ return []; } }
+  function addMyNom(){ const a=getMyNoms(); a.push(now()); localStorage.setItem(K_NOMS, JSON.stringify(a.slice(-200))); }
+  function myNomsThisWeek(){ const wk=thisWeek(); return getMyNoms().filter(t=>t>=wk).length; }
+
+  function personStanding(id){
+    const p=DATA.people.find(x=>x.id===id); if(!p) return null;
+    const sorted=DATA.people.map(x=>({x,s:stats(x)})).sort((a,b)=> b.s.total-a.s.total || b.s.week-a.s.week);
+    const rank=sorted.findIndex(o=>o.x.id===id)+1;
+    const s=stats(p), tierId=currentTier(p), cIdx=TIER_INDEX[tierId], nextTier=TIERS[cIdx+1]||null;
+    const remaining=nextTier? Math.max(0, tierMin(nextTier.id)-s.total):0;
+    return { p, rank, s, tierId, nextTier, remaining };
+  }
+  function renderMeCard(){
+    const host=$("#meCard"); if(!host) return;
+    if(getMe() && !DATA.people.some(p=>p.id===getMe())) setMe(null);   // person removed from roster
+    const st = getMe()? personStanding(getMe()) : null;
+    if(!st){
+      host.innerHTML = `<div class="me-cta"><div><b>New here?</b> Find your name to follow your progress and see how close you are to leveling up.</div><button id="findMeBtn">Find my name</button></div>`;
+      return;
+    }
+    const {p,rank,s,tierId,nextTier,remaining}=st, T=TIER_BY_ID[tierId];
+    host.innerHTML = `<div class="me-card">
+      ${boardAvatar(p, 56, B_MOVE, "#000")}
+      <div style="flex:1;min-width:0">
+        <div class="me-chip">You</div>
+        <div class="me-name">${esc(p.name)}</div>
+        <div class="me-meta">#${rank} on the roster · ${T.name} · ${s.total} callout${s.total!==1?"s":""}${ nextTier? ` · <b>${remaining}</b> to ${nextTier.name}` : ` · Course record` }</div>
+      </div>
+      <div class="me-acts">
+        <button data-me="jump" class="solid">See my row</button>
+        <button data-me="reset">Not you?</button>
+      </div>
+    </div>`;
+  }
+  $("#meCard").addEventListener("click",e=>{
+    if(e.target.closest("#findMeBtn")){ openMePicker(); return; }
+    const b=e.target.closest("[data-me]"); if(!b) return;
+    if(b.dataset.me==="reset"){ setMe(null); renderMeCard(); renderRoster(); toast("Cleared. Pick your name anytime."); }
+    else if(b.dataset.me==="jump") jumpToMe();
+  });
+
+  function openMePicker(){ $("#meSearch").value=""; renderMeList(""); openModal("meScrim"); setTimeout(()=>$("#meSearch").focus(),40); }
+  function renderMeList(q){
+    q=(q||"").toLowerCase();
+    const list=DATA.people.slice().sort((a,b)=>a.name.localeCompare(b.name)).filter(p=>!q||p.name.toLowerCase().includes(q));
+    $("#meList").innerHTML = list.length ? list.map(p=>`<button data-pick="${p.id}">${esc(p.name)}</button>`).join("")
+      : `<div class="none">No names match. Ask a coach to add you to the roster.</div>`;
+  }
+  $("#meSearch").addEventListener("input",e=>renderMeList(e.target.value));
+  $("#meList").addEventListener("click",e=>{
+    const b=e.target.closest("[data-pick]"); if(!b) return;
+    setMe(b.dataset.pick); closeModal($("#meScrim")); renderMeCard(); renderRoster();
+    const p=DATA.people.find(x=>x.id===b.dataset.pick);
+    toast(`Following ${p? p.name.split(" ")[0] : "you"}. Welcome to the board.`);
+    jumpToMe();
+  });
+  function jumpToMe(){
+    const meId=getMe(); if(!meId) return;
+    ui.q=""; ui.filter="all"; ui.page=1; if($("#search")) $("#search").value="";
+    $$("#tierFilter .chip-f").forEach(c=>c.setAttribute("aria-pressed", c.dataset.tier==="all"));
+    let list=DATA.people.map(p=>({p,s:stats(p)}));
+    if(ui.sort==="name") list.sort((a,b)=>a.p.name.localeCompare(b.p.name));
+    else if(ui.sort==="week") list.sort((a,b)=> b.s.week-a.s.week || b.s.total-a.s.total);
+    else list.sort((a,b)=> b.s.total-a.s.total || b.s.week-a.s.week);
+    const idx=list.findIndex(o=>o.p.id===meId); if(idx<0) return;
+    ui.page=Math.floor(idx/ROSTER_PER_PAGE)+1;
+    switchView("board"); renderRoster();
+    setTimeout(()=>{ const row=document.querySelector(`#roster [data-rowid="${meId}"]`); if(row) row.scrollIntoView({block:"center",behavior:"smooth"}); },70);
+  }
+  function showWelcomeIfNeeded(){ if(localStorage.getItem(K_WELCOME)||!DATA.people.length) return; openModal("welcomeScrim"); }
+  function dismissWelcome(){ localStorage.setItem(K_WELCOME,"1"); closeModal($("#welcomeScrim")); }
+  $("#wlcSkip").onclick=dismissWelcome;
+  $("#wlcFindMe").onclick=()=>{ dismissWelcome(); openMePicker(); };
 
   function uid(){ return "p"+Math.random().toString(36).slice(2,9); }
   function cid(){ return "c"+Math.random().toString(36).slice(2,9); }
@@ -1257,6 +1391,7 @@
 
   function render(){
     renderStrip();
+    renderMeCard();
     renderBoardLadder();
     renderRoster();
     renderTeam();
@@ -1450,6 +1585,7 @@
 
   function renderRoster(){
     const host=$("#roster");
+    const meId=getMe();
     let list = DATA.people.map(p=>({p, s:stats(p), tier:currentTier(p)}));
     if(ui.filter!=="all") list=list.filter(x=>x.tier===ui.filter);
     if(ui.q){ const q=ui.q.toLowerCase(); list=list.filter(x=>x.p.name.toLowerCase().includes(q)); }
@@ -1480,16 +1616,20 @@
       const open = ui.openRow===p.id;
       const av=boardAvatar(p, 36, B_TURF, B_MOVE);
       const chip=(bg,fg)=>`padding:8px 14px;border-radius:99px;background:${bg};color:${fg};font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase`;
+      const isMe = p.id===meId;
       const drawer = open ? `<div style="display:flex;gap:14px;align-items:center;padding:0 26px 22px 96px;background:#F1EEE6;flex-wrap:wrap">
           <div style="${chip(B_TURF,B_CREAM)}">Coach · ${s.coach}</div>
           <div style="${chip(B_MOVE,'#000')}">Teammate · ${s.peer}</div>
           <div style="${chip(B_VIOLET,'#000')}">Athlete · ${s.athlete}</div>
           <div style="font-size:14px;font-style:italic;opacity:.7">${ last? `Last: “${esc(last.type)}”` : 'No callouts yet' }</div>
+          ${ isMe ? `<span style="margin-left:auto;font-size:12px;color:rgba(0,0,0,.4);text-transform:uppercase;letter-spacing:.08em">That's you</span>`
+                  : `<button data-nominate="${p.id}" style="margin-left:auto;padding:9px 16px;border-radius:99px;background:${B_MOVE};color:#000;font-family:'Jost',sans-serif;font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;border:none;cursor:pointer">Cheer ${esc(p.name.split(" ")[0])}</button>` }
         </div>` : "";
-      return `<div class="grow" data-rowid="${p.id}" data-id="${p.id}" style="display:flex;align-items:center;gap:18px;padding:18px 26px;cursor:pointer;border-top:1px solid rgba(0,0,0,.08);background:${open?'#F1EEE6':'transparent'};transition:background .15s">
+      const rowBg = isMe ? 'rgba(217,224,71,.22)' : (open?'#F1EEE6':'transparent');
+      return `<div class="grow" data-rowid="${p.id}" data-id="${p.id}" style="display:flex;align-items:center;gap:18px;padding:18px 26px;cursor:pointer;border-top:1px solid rgba(0,0,0,.08);background:${rowBg};transition:background .15s">
           <div style="width:52px;flex:none;font-family:'Jost',sans-serif;font-weight:700;font-size:26px;color:rgba(0,0,0,.28)">${rank}</div>
           ${av}
-          <div style="flex:1;min-width:0"><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:21px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#000">${esc(p.name)}</div></div>
+          <div style="flex:1;min-width:0;display:flex;align-items:center;gap:8px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:21px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#000">${esc(p.name)}</div>${ isMe ? `<span style="flex:none;background:#000;color:${B_MOVE};font-size:9px;font-weight:800;letter-spacing:.1em;padding:2px 6px;border-radius:99px">YOU</span>` : "" }</div>
           <div style="${boardTierChip(tierId,false)};width:130px;text-align:center;flex:none">${T.name}</div>
           <div style="width:150px;flex:none">
             <div style="height:10px;border-radius:99px;background:rgba(0,0,0,.09);overflow:hidden"><div style="height:100%;width:${pct}%;border-radius:99px;background:${barBg}"></div></div>
@@ -1691,15 +1831,20 @@
     $("#nomGrid").innerHTML = CALLOUTS.map((c,i)=>`<button class="co" data-i="${i}" aria-pressed="false"><div class="t">${esc(c[0])}</div><div class="d">${esc(c[1])}</div></button>`).join("");
     $("#nomGrid").onclick=e=>{ const b=e.target.closest(".co"); if(!b)return; ui.nomSel=+b.dataset.i; $$("#nomGrid .co").forEach(x=>x.setAttribute("aria-pressed", x===b)); };
   }
-  function openNominate(){
+  function openNominate(preId){
     if(!DATA.people.length){ toast("No teammates on the roster yet"); return; }
     ui.nomSel=null;
     $$("#nomGrid .co").forEach(x=>x.setAttribute("aria-pressed",false));
-    $("#nomNote").value=""; $("#nomBy").value="";
+    $("#nomNote").value="";
+    $("#nomBy").value=getNominatorName();   // remembered on this device
     $("#nomWho").innerHTML = DATA.people.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
+    if(preId && DATA.people.some(p=>p.id===preId)) $("#nomWho").value=preId;
+    const wk=myNomsThisWeek();
+    $("#nomCount").textContent = wk>0 ? `You've sent ${wk} cheer${wk!==1?"s":""} this week. Keep it up.` : "";
     openModal("nominateScrim");
+    if(preId) setTimeout(()=>{ const g=$("#nomGrid"); if(g) g.scrollIntoView({block:"nearest"}); },30);
   }
-  $("#nominateBtn").onclick=openNominate;
+  $("#nominateBtn").onclick=()=>openNominate();
   $("#nomSubmit").onclick=async ()=>{
     const pid=$("#nomWho").value; const person=DATA.people.find(x=>x.id===pid);
     if(!person){ toast("Pick a teammate"); return; }
@@ -1711,15 +1856,20 @@
       try{
         const r=await fetch(API_NOM,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({nomination})});
         const j=await r.json();
-        if(j && j.ok){ CLOUD.rev=j.rev; closeModal($("#nominateScrim")); toast("Nomination sent. A coach will review it. Nice cheer."); refreshFromCloud(); return; }
+        if(j && j.ok){ CLOUD.rev=j.rev; setNominatorName(by); addMyNom(); closeModal($("#nominateScrim")); cheerToast(person); refreshFromCloud(); return; }
         toast("Couldn't send. Try again"); return;
       }catch(e){ toast("Can't reach the board. Try again"); return; }
     }
     if(!Array.isArray(DATA.nominations)) DATA.nominations=[];
     DATA.nominations.push({ id:"n"+Math.random().toString(36).slice(2,9), personId:pid, type:nomination.type, note:nomination.note, by, date:now() });
     logActivity(`nominated ${person.name} for ${nomination.type}`, by);
-    save(); render(); closeModal($("#nominateScrim")); toast("Nomination sent");
+    setNominatorName(by); addMyNom();
+    save(); render(); closeModal($("#nominateScrim")); cheerToast(person);
   };
+  function cheerToast(person){
+    const n=myNomsThisWeek();
+    toast(`Nice cheer for ${person.name.split(" ")[0]}. Sent to a coach.${ n>1 ? ` That's ${n} from you this week.` : "" }`);
+  }
   $("#nomList").addEventListener("click",e=>{
     const b=e.target.closest("[data-nom]"); if(!b) return;
     const n=(DATA.nominations||[]).find(x=>x.id===b.dataset.id); if(!n) return;
@@ -1830,7 +1980,9 @@
   });
   // tap a roster row (not a manager button) to expand the Coach/Teammate/Athlete breakdown
   $("#roster").addEventListener("click",e=>{
-    if(e.target.closest("[data-act]")) return;      // manager buttons handled above
+    const nom=e.target.closest("[data-nominate]");
+    if(nom){ openNominate(nom.dataset.nominate); return; }   // "Cheer [name]" from the breakdown
+    if(e.target.closest("[data-act]")) return;               // manager buttons handled above
     const row=e.target.closest("[data-rowid]"); if(!row) return;
     ui.openRow = ui.openRow===row.dataset.rowid ? null : row.dataset.rowid;
     renderRoster();
@@ -2091,6 +2243,7 @@
   $$("#recentRange [data-range]").forEach(x=>x.setAttribute("aria-pressed", x.dataset.range===ui.recentRange));
   reflectMgr(); renderManagers();
   render();     // instant paint from local cache
+  showWelcomeIfNeeded();   // first-visit orientation (fires regardless of cloud/offline)
   boot();       // then sync with the cloud (falls back to this device if unreachable)
 })();
 </script>
