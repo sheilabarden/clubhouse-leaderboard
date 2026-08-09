@@ -409,6 +409,44 @@
   .wlc-item b { color:var(--ink); }
   .wlc-n { flex:none; width:24px; height:24px; border-radius:50%; background:var(--accent); color:var(--accent-ink); font-weight:800; font-size:13px; display:grid; place-items:center; }
   @media (max-width:640px){ .me-card { flex-wrap:wrap; } .me-card .me-acts { margin-left:0; width:100%; } }
+  /* Team Roster + Managers — brand boards */
+  #view-team, #view-codes { background:var(--turf); border-radius:28px; padding:34px 30px 40px; color:var(--stadium); font-family:'Jost','Futura PT',Futura,var(--font-ui); }
+  #view-team .team-head, #view-codes .team-head { align-items:flex-end; margin-bottom:22px; }
+  #view-team .team-title, #view-codes .team-title { font-family:'Jost','Futura PT',Futura,sans-serif; color:var(--move); font-weight:700; letter-spacing:.02em; }
+  #view-team .team-sub, #view-codes .team-sub { color:rgba(254,249,243,.72); }
+  #view-team .team-actions .btn, #view-codes .team-actions .btn { color:var(--stadium); border-color:rgba(254,249,243,.25); background:rgba(254,249,243,.06); }
+  #view-team .team-actions .btn:hover, #view-codes .team-actions .btn:hover { background:rgba(254,249,243,.12); }
+  #view-team .team-actions .btn.solid, #view-codes .team-actions .btn.solid { background:var(--move); color:#000; border-color:transparent; }
+  /* pending nominations -> cream */
+  #view-team .nom-queue { background:#FEF9F3; color:#000; border:2px solid var(--move); border-radius:20px; }
+  #view-team .nom-queue .how-sec { color:#0A693C; }
+  #view-team .nom-queue .team-sub { color:rgba(0,0,0,.6); }
+  #view-team .nom-count { background:var(--move); color:#000; }
+  #view-team .nom-item { background:#fff; border-color:rgba(0,0,0,.1); color:#000; }
+  #view-team .nom-item .ni-note { color:rgba(0,0,0,.6); }
+  #view-team .nom-item .ni-by { color:rgba(0,0,0,.45); }
+  #view-team .nom-item .btn.solid { background:var(--move); color:#000; border-color:transparent; }
+  #view-team .nom-item .btn.ghost { color:#0A693C; border-color:rgba(0,0,0,.15); background:transparent; }
+  /* team roster rows -> cream */
+  #view-team .trow { background:#FEF9F3; color:#000; border-color:transparent; box-shadow:0 8px 0 -6px rgba(0,0,0,.1); }
+  #view-team .trow .tname { color:#000; }
+  #view-team .trow .tmeta { color:rgba(0,0,0,.6); }
+  #view-team .trow .tmeta b { color:#0A693C; }
+  #view-team .trow .btn { color:#0A693C; border-color:rgba(0,0,0,.15); background:transparent; }
+  #view-team .trow .btn:hover { background:rgba(0,0,0,.05); }
+  #view-team .trow .btn.solid { background:var(--move); color:#000; border-color:transparent; }
+  #view-team .trow .btn.danger { color:#c0392b; border-color:rgba(192,57,43,.4); }
+  /* manager codes rows -> cream */
+  #view-codes .code-row { background:#FEF9F3; color:#000; border-color:transparent; box-shadow:0 8px 0 -6px rgba(0,0,0,.1); }
+  #view-codes .code-row .cr-name { color:#000; }
+  #view-codes .code-row .cr-code { color:#0A693C; background:#fff; border-color:rgba(0,0,0,.12); }
+  #view-codes .code-row .cr-tag { color:rgba(0,0,0,.5); border-color:rgba(0,0,0,.15); }
+  #view-codes .code-row .cr-tag.owner { color:#0A693C; border-color:#0A693C; background:rgba(10,105,60,.08); }
+  #view-codes .code-row .cr-tag.board { color:#8a5fb0; border-color:#c9a0d6; background:transparent; }
+  #view-codes .code-row .cr-acts .btn { color:#0A693C; border-color:rgba(0,0,0,.15); background:transparent; }
+  #view-codes .code-row .cr-acts .btn:hover { background:rgba(0,0,0,.05); }
+  #view-codes .code-row .cr-acts .btn.danger { color:#c0392b; border-color:rgba(192,57,43,.4); }
+  @media (max-width:640px){ #view-team, #view-codes { padding:20px 16px 28px; } }
   .board-flag { width:46px; height:auto; flex:none; animation:chFlagWave 4s ease-in-out infinite; transform-origin:8% 90%; }
   .bogey-run { width:360px; flex:none; align-self:flex-end; margin-bottom:-8px; opacity:.95; animation:chTrot 3.4s ease-in-out infinite; }
   @media (prefers-reduced-motion: reduce){ .board-flag,.bogey-run{ animation:none !important; } }
@@ -779,6 +817,7 @@
       </section>
       <section class="team-head">
         <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><img src="assets/CH_Flag_Move.svg" alt="Clubhouse flag" class="board-flag" style="width:30px"><span style="font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(254,249,243,.6)">Back of house</span></div>
           <h2 class="team-title">Team Roster</h2>
           <p class="team-sub" id="teamCount">Everyone on the roster, in one place.</p>
           <p class="team-sub" id="teamLastUnlock" style="margin-top:2px"></p>
@@ -801,6 +840,7 @@
     <div id="view-codes" hidden>
       <section class="team-head">
         <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><img src="assets/CH_Flag_Move.svg" alt="Clubhouse flag" class="board-flag" style="width:30px"><span style="font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(254,249,243,.6)">Owner only</span></div>
           <h2 class="team-title">Managers &amp; codes</h2>
           <p class="team-sub" id="codesSub">Only you can see this tab. Everyone's unlock PIN lives here.</p>
         </div>
