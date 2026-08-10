@@ -1155,29 +1155,29 @@
   const TIERS = [
     { id:"teebox",    name:"Tee Box",   v:"--t-teebox",    blurb:"On the tee. Come up swinging." },
     { id:"rookie",    name:"Rookie",    v:"--t-rookie",    blurb:"Step up to the tee box.",
-      req:{ total:3 }, next:"3 callouts" },
+      req:{ total:5 }, next:"3 callouts" },
     { id:"starter",   name:"Starter",   v:"--t-starter",   blurb:"On the fairway.",
-      req:{ total:15, peer:2 }, next:"15 callouts · 2 teammate" },
+      req:{ total:20, peer:2 }, next:"15 callouts · 2 teammate" },
     { id:"allstar",   name:"All-Star",  v:"--t-allstar",   blurb:"On the back nine.",
-      req:{ total:35, peer:5, athlete:1 }, next:"35 · 5 teammate · 1 athlete" },
+      req:{ total:40, peer:5, athlete:1 }, next:"35 · 5 teammate · 1 athlete" },
     { id:"mvp",       name:"MVP",       v:"--t-mvp",       blurb:"Approaching the green.",
-      req:{ total:60, peer:8, athlete:2 }, next:"60 · 8 teammate · 2 athlete" },
+      req:{ total:65, peer:8, athlete:2 }, next:"60 · 8 teammate · 2 athlete" },
     { id:"playmaker", name:"Playmaker", v:"--t-playmaker", blurb:"Scratch. Zero handicap.",
-      req:{ total:100, peer:15, athlete:3, mentor:true }, next:"100 · 15 teammate · 3 athlete · mentor" },
+      req:{ total:115, peer:15, athlete:3, mentor:true }, next:"100 · 15 teammate · 3 athlete · mentor" },
     { id:"legend",    name:"Legend",    v:"--t-legend",    blurb:"Course record.",
-      req:{ total:150, front:true }, next:"150 · nominated by all" },
+      req:{ total:175, front:true }, next:"150 · nominated by all" },
   ];
   const TIER_BY_ID = Object.fromEntries(TIERS.map(t=>[t.id,t]));
   const TIER_INDEX = Object.fromEntries(TIERS.map((t,i)=>[t.id,i]));
 
   /* earn + reward copy for the read-only How It Works tab (from the program doc) */
   const HOW = {
-    rookie:    { earn:"3 callouts in 60 consecutive days.", reward:"$10 local gift card or Clubhouse food credit. Your name goes on the Leaderboard." },
-    starter:   { earn:"15 total callouts. At least 2 teammate-nominated.", reward:"$25 local gift card or food credit. Starter badge on the board." },
-    allstar:   { earn:"35 total. 5 teammate-nominated. 1 athlete-generated.", reward:"$50 food & bar credit. Private Flight Deck bay or a round of Pure Putt for two. Photo on the All-Star wall. 30-day scheduling priority." },
-    mvp:       { earn:"60 total. 8 teammate-nominated. 2 athlete-generated.", reward:"Your pick from the exclusive Clubhouse gear collection. Floor lead status on peak shifts." },
-    playmaker: { earn:"100 total. 15 teammate-nominated. 3 athlete-generated. Mentored a Rookie.", reward:"Personalized Clubhouse gear with your name on it. One paid day off. A monthly Playmaker shift. Quarter scheduling priority." },
-    legend:    { earn:"150 total. Sustained across all callout types. Nominated by peers, coaches, and the front office.", reward:"The full Legend drop: premium personalized gear with your name and legacy. Two paid days off. Permanent Legend wall. Legacy Award at all-hands." },
+    rookie:    { earn:"5 callouts in 60 consecutive days.", reward:"$10 local gift card or Clubhouse food credit. Your name goes on the Leaderboard." },
+    starter:   { earn:"20 total callouts. At least 2 teammate-nominated.", reward:"$25 local gift card or food credit. Starter badge on the board." },
+    allstar:   { earn:"40 total. 5 teammate-nominated. 1 athlete-generated.", reward:"$50 Clubhouse food credit. Private Flight Deck bay or a round of Pure Putt for two. Photo on the All-Star wall. 30-day scheduling priority." },
+    mvp:       { earn:"65 total. 8 teammate-nominated. 2 athlete-generated.", reward:"Your pick from the exclusive Clubhouse gear collection." },
+    playmaker: { earn:"115 total. 15 teammate-nominated. 3 athlete-generated. Mentored a Rookie.", reward:"Personalized Clubhouse gear with your name on it. One paid day off." },
+    legend:    { earn:"175 total. Sustained across all callout types. Nominated by peers, coaches, and the front office.", reward:"The full Legend drop: premium personalized gear with your name and legacy. Two paid days off. Permanent Legend wall. Legacy Award at all-hands." },
   };
 
   const CALLOUTS = [
